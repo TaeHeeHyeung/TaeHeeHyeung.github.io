@@ -1,37 +1,55 @@
-## Welcome to GitHub Pages
+## 지속적으로 서비스를 향상 시키고 싶은 개발자 형태희 입니다.
 
-You can use the [editor on GitHub](https://github.com/TaeHeeHyeung/TaeHeeHyeung.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
+### 개발하는 즉시 눈에 결과물이 보이는게 재밌어서 안드로이드 개발을 시작하게 됐습니다. 단순히 눈에 보이는 결과물을 위한 개발을 넘어 유지보수, 성능에 좋은 개발을 하려 노력하고 있습니다.  
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### 프로필
+- 이름: 형태희
+- 이메일: hth0893@naver.com
+- 전화번호: 010 - 7449 - 0893
 
-### Markdown
+### 스킬
+- 언어: Java, Kotlin, SqLite
+- API: Glide, Retrofit, AsyncHttp
+- 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### 공부
+- Reactive Programming in Kotlin (현재 공부 중)
+- Do it Kotlin
+- 
 
-```markdown
-Syntax highlighted code block
+### 경험
 
-# Header 1
-## Header 2
-### Header 3
+1. 디지털포토 (서초)
+ - 사진인화 (한국, 일본)
+ - 포토북 (한국, 일본)
+ - 사진@액자 (한국)
+ - 셀프증명 (한국
+ - 포스트 카드(일본)
+ - 파샤토 (일본)
 
-- Bulleted
-- List
+구현 기능 
+- 핑거푸시 푸시, 파이어베이스 메시지
+- 크롭 기능: 사진의 인화 영역을 조절하기 위한 기능 
+  - (인화 용지와 사진 해상도를 고려한 줌)
+  - 뷰를 이동 시키기위한 애니메이션 기능
+- 딥 링크, 앱 링크, 
+- 화질 향상을 위한 테스트: 큰 사진을 작게 만들 때 일그러지는 화질을 좋게 만들기 
+- 카메라 기능: cats-oss/android-gpuimage 와 카메라 기능을 조합하여 뷰티 기능 구현
+- 
+- 포토북 편집 터치 기능: 
+- 터치 기능
 
-1. Numbered
-2. List
+2. 국비 교육 과정 (디지털 컨버런스 Spring Java 웹 개발 과정)
+- Swing을 활용한 개발
 
-**Bold** and _Italic_ and `Code` text
+2. 와이파이브 (대전)
+ - 내 차 찾기 서비스 []
+ - 출입 관리 시스템 
 
-[Link](url) and ![Image](src)
-```
+구현 기능
+- A 스타 알고리즘을 활용한 경로 찾기
+- 가속도 센서와 블루투스 신호를 통한 측위 알고리즘 
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/TaeHeeHyeung/TaeHeeHyeung.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+3. 전북 대학교 (전주)
+- 해커톤 입상
