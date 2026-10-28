@@ -31,6 +31,10 @@
         <path d="M340,85 L104,40 M340,85 L104,130" class="ray"/>
         <rect x="336" y="70" width="12" height="30" rx="3" class="lens"/>
         <rect x="430" y="40" width="90" height="90" rx="6" class="screen"/>
+        <ellipse cx="475" cy="86" rx="21" ry="28" class="shot"/>
+        <circle cx="467" cy="80" r="2.2" class="feat-dot"/><circle cx="483" cy="80" r="2.2" class="feat-dot"/>
+        <ellipse cx="475" cy="90" rx="2.5" ry="4" class="feat"/>
+        <path d="M468,100 Q475,104 482,100" class="feat"/>
         <ellipse cx="475" cy="85" rx="22" ry="30" class="guide"/>
         <text x="560" y="80" class="ok">정상</text>
         <text x="560" y="100" class="sub2">가이드에 딱 맞음</text>
@@ -42,10 +46,14 @@
         <path d="M340,235 L240,200 M340,235 L240,270" class="ray"/>
         <rect x="336" y="220" width="12" height="30" rx="3" class="lens"/>
         <rect x="430" y="190" width="90" height="90" rx="6" class="screen"/>
+        <ellipse cx="475" cy="236" rx="14" ry="35" class="shot"/>
+        <circle cx="469" cy="226" r="1.8" class="feat-dot"/><circle cx="481" cy="226" r="1.8" class="feat-dot"/>
+        <ellipse cx="475" cy="240" rx="5" ry="8" class="feat"/>
+        <path d="M470,256 Q475,259 480,256" class="feat"/>
         <ellipse cx="475" cy="235" rx="22" ry="30" class="guide"/>
         <text x="560" y="230" class="bad">오이 현상</text>
-        <text x="560" y="250" class="sub2">얼굴이 작게 보여 가이드를 채우려고</text>
-        <text x="560" y="268" class="sub2">카메라에 더 다가감</text>
+        <text x="560" y="250" class="sub2">가이드를 채우려고 카메라에 더 다가가</text>
+        <text x="560" y="268" class="sub2">얼굴이 좁고 길게, 코는 크게 찍힘</text>
       </svg>
       <figcaption>화면의 가이드 크기를 고정하면, 화각이 넓은 기기에서는 얼굴이 작게 찍혀 사용자가 가이드를 채우려고 더 가까이 다가갑니다. 그래서 <b>기기의 렌즈 화각에 맞춰 가이드 크기를 계산</b>해야 어느 기기에서든 같은 거리에서 찍게 됩니다.</figcaption>
     </figure>

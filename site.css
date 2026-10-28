@@ -139,3 +139,6 @@ pre { margin: 12px 0; padding: 14px 16px; background: var(--card); border: 1px s
 .diagram .plane { stroke: var(--line); stroke-width: 1.5; }
 .diagram .head { fill: var(--muted); }
 @media (max-width: 560px) { .diagram { overflow-x: auto; } .diagram svg { min-width: 640px; } }
+.diagram .shot { fill: var(--accent-soft); stroke: var(--muted); stroke-width: 1.2; }
+.diagram .feat { fill: none; stroke: var(--text); stroke-width: 1.3; }
+.diagram .feat-dot { fill: var(--text); }
