@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R8 난독화 도입 — 형태희</title>
+<meta name="description" content="R8 난독화 도입 시 조사한 위험과 빌드 단계 안전장치">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">R8 난독화 도입 — 위험 조사와 빌드 단계 안전장치</h1>
+    <p class="role">2026.09 · 8개 앱 적용 · ㈜디지털포토</p>
+
+    <h2>배경 — 구글 플레이 콘솔 경고</h2>
+    <blockquote>
+      DEX 코드 최적화가 기준점 미만입니다. 다음 카테고리에서 비율을 개선하세요. 난독화(1%)<br>
+      비율이 25% 미만인 앱 카테고리가 있으면 Google Play에서 앱의 공개 상태와 게시 기능이 영향을 받을 수 있습니다.
+    </blockquote>
+    <p class="note"><a href="https://developer.android.com/topic/performance/vitals/code-optimization?hl=ko">Android 개발자 문서 — 코드 최적화</a></p>
+
+    <h2>중요하게 생각한 점</h2>
+    <ul>
+      <li><b>유지보수</b>: 미래의 코드 실수를 막기 위해 빌드 시 코드 체크 기능 추가</li>
+      <li><b>dontwarn 제거</b>: 경고를 무시하는 기능이라 위험할 수 있어, 필요할 때만 추가</li>
+      <li><b>@Keep 어노테이션</b> 사용</li>
+      <li><b>에러 확인</b>: mapping 파일 Play Console 업로드, Firebase Crashlytics 플러그인 등록</li>
+      <li><b>API에 따라 다른 ProGuard 규칙</b>: 앱끼리 API 버전 통일, API에 맞는 규칙 적용</li>
+      <li><b>이름을 문자열 그대로 사용하는 방식 주의</b>: 예) Fragment.class (.class 전체 검색)</li>
+    </ul>
+
+    <h2>@Keep</h2>
+    <p>난독화하면 변수명이 바뀌기 때문에, Gson으로 데이터를 저장·로드하는 코드는 변수 이름이 난독화되어 문제가 생깁니다. 클래스 상단에 @Keep 어노테이션을 추가하고 proguard 규칙을 넣었습니다.</p>
+<pre><code>-keep @interface androidx.annotation.Keep
+-keep @androidx.annotation.Keep class * {*;} # 멤버 전체 보존
+-keepclasseswithmembers class * {
+    @androidx.annotation.Keep &lt;fields&gt;;
+}
+-keepclasseswithmembers class * {
+    @androidx.annotation.Keep &lt;methods&gt;;
+}
+-keepclasseswithmembers class * {
+    @androidx.annotation.Keep &lt;init&gt;(...);
+}</code></pre>
+
+    <h2>주의사항과 대응</h2>
+    <table>
+      <tr><th>주의할 곳</th><th>대응</th></tr>
+      <tr><td class="key">Enum, API 통신, 상속 코드</td><td>ProGuard 예외 규칙 추가. 앞으로 구현할 때도 유의해야 해서 데이터로 쓰는 클래스를 한 패키지에 모아 모듈화</td></tr>
+      <tr><td class="key">Reflection·동적 참조</td><td>현재 사용하지 않음. 필요하면 @Keep으로 예외 처리</td></tr>
+      <tr><td class="key">WebView JavascriptInterface</td><td>난독화되면 웹에서 호출하는 이름이 바뀔 수 있어 주의</td></tr>
+      <tr><td class="key">Gson·Retrofit JSON 파싱</td><td>data 클래스를 data 패키지로 모두 옮긴 뒤 proguard 규칙 추가</td></tr>
+      <tr><td class="key">외부 API·라이브러리</td><td>각 API 문서의 난독화 규칙 확인</td></tr>
+      <tr><td class="key">릴리스 빌드</td><td>난독화는 릴리스 모드에서 동작하므로 릴리스 모드로 확인</td></tr>
+    </table>
+
+    <h2>Crash 로그 이슈</h2>
+    <p>난독화되면 에러 로그의 클래스·변수 이름도 바뀌어 원인을 바로 확인할 수 없습니다. mapping.txt와 retrace 도구로 원래 이름을 복원할 수 있지만 번거롭고, 에러는 실행 도중에 발생하므로 <b>빌드할 때 미리 걸러지도록</b> 했습니다.</p>
+
+    <h2>사람이 놓치는 규칙에 대한 대비 — 빌드 시 검사</h2>
+    <p>proguard 규칙을 추가해도, 이후 새 코드가 추가되면서 규칙을 빠뜨려 에러가 생길 수 있습니다. 그래서 <b>빌드할 때 프로젝트 파일을 탐색해 정규식으로 검사하는 규칙</b>을 만들어 모든 앱에 적용했습니다.</p>
+<pre><code>apply from: "${rootProject.projectDir}/tools/r8-guard.gradle"</code></pre>
+
+    <h2>코드 변경 시 확인</h2>
+    <ol>
+      <li>문자열로 클래스·메서드·필드·리소스 이름을 쓰나? → 쓰지 말거나 keep 룰 추가</li>
+      <li>Gson으로 주고받는 모델인가? → data.model 아래에 두기 (또는 @Keep)</li>
+      <li>새 라이브러리를 넣었나? → release 빌드 후 missing_rules.txt 확인</li>
+    </ol>
+
+    <h2>Claude에게 준 지시</h2>
+    <blockquote>
+      proguard 규칙을 추가해줘<br>
+      - model 패키지 모듈화<br>
+      - proguard 규칙 추가 (API 확인하여 적용)<br>
+      - 전체 파일 검사<br>
+      - Keep 어노테이션 추가<br>
+      - 사용하는 API 확인하여 적용<br>
+      - 그 외 내가 놓친 부분이 있으면 물어보고 진행
+    </blockquote>
+
+    <h2>결과</h2>
+    <p><b>8개 프로젝트에 적용</b>, 배포 후 관련 오류 없음.</p>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+</body>
+</html>
