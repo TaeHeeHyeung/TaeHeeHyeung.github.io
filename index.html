@@ -160,7 +160,7 @@
     <dl>
       <dt>배경</dt><dd>AI를 도입해 셀프증명 코드를 최신화(Java → Kotlin·코루틴 전환, Hilt 의존성 주입 적용)하면서 코드 구조가 크게 바뀜</dd>
       <dt>해결</dt><dd><ul>
-        <li>AI 작업은 한 번에 맡기지 않고 <b>에러 수정 → lint → Kotlin 전환 → 코루틴·Hilt</b> 순서로 나눠 진행 (<a class="more" href="#modernize">자세한 과정 보기</a>)</li>
+        <li>AI 작업은 한 번에 맡기지 않고 <b>에러 수정 → lint → Kotlin 전환 → 코루틴·Hilt</b> 순서로 나눠 진행. 단계마다는 바뀐 부분만 확인하고, Q/A 요청 전 전수 검사 (<a class="more" href="#modernize">자세한 과정 보기</a>)</li>
         <li>바뀐 코드를 개발자가 읽고 고칠 수 있도록 <b>학습 페이지 2종을 AI에 요청해 제작</b> — Kotlin 유지보수 교육(10장, 마무리 퀴즈), Hilt 입문</li>
         <li><b>실제 셀프증명 코드(장바구니 주문 업로드 등)를 예제로</b>, 무엇이 바뀌었는지 → 핵심 개념 → 자주 하는 작업 레시피 → 에러·함정 순서로 구성</li>
         <li>장마다 ‘이해함’ 체크로 학습 진도를 확인</li>
@@ -263,7 +263,7 @@
   
   <section class="block" id="modernize">
     <h2 class="sec">상세 · 셀프증명 코드 최신화 과정 (2026.10, AI 코딩 도구 활용)</h2>
-    <p>AI에 한 번에 맡기지 않고 단계를 나눠, 한 단계를 빌드와 실기기로 확인한 뒤 다음 단계로 넘어갔습니다.</p>
+    <p>AI에 한 번에 맡기지 않고 단계를 나눠 진행했습니다. 단계마다 앱 전체를 테스트해도 최종 Q/A 전에는 어차피 전수 검사가 필요하기 때문에, <b>단계마다는 Claude가 제시한 테스트 항목을 기준으로 바뀐 부분만 확인</b>하며 빠르게 넘어가고, <b>최종 Q/A 요청 전에 전수 검사를 직접 한 뒤 Q/A 테스터에게 요청</b>했습니다.</p>
 
     <figure class="flow" aria-label="작업 순서">
       <svg viewBox="0 0 820 92" role="img">
@@ -291,6 +291,7 @@
       <tr><td class="key">③ Kotlin 전환</td><td>작은 패키지부터 <b>9번에 나눠</b> Java 284개 파일 전환. 빌드 검사(r8-guard)가 .kt 파일도 검사하도록 확장</td><td>바뀌는 양이 가장 커서, 나눠서 진행하고 단계마다 빌드를 확인하기 위해</td></tr>
       <tr><td class="key">④ 코루틴·Hilt</td><td>Thread·CountDownLatch를 화면 수명에 맞는 코루틴으로 정리(6단계), Hilt 의존성 주입, 화면 회전 대응. 이 과정에서 Crashlytics 상위 크래시(1위 여권 크롭, 3위 핀치 줌 등)도 수정</td><td>언어를 바꾼 뒤에야 Kotlin다운 구조로 다듬을 수 있어서</td></tr>
       <tr><td class="key">학습 자료</td><td>Kotlin 유지보수 교육(10장, 퀴즈), Hilt 입문 학습 페이지</td><td>AI가 바꾼 코드를 개발자가 직접 읽고 고칠 수 있게</td></tr>
+      <tr><td class="key">검증</td><td>단계마다: Claude가 제시한 테스트 항목으로 바뀐 부분만 확인<br>마지막: 전수 검사를 직접 한 뒤 Q/A 테스터에게 최종 테스트 요청</td><td>단계마다 전체를 테스트해도 최종 Q/A 전 전수 검사는 어차피 필요해서, 중간 테스트는 바뀐 부분에 집중</td></tr>
     </table>
 
     <figure class="bars" aria-label="Kotlin 전환 9단계별 파일 수">
