@@ -74,6 +74,17 @@
         <li>장마다 ‘이해함’ 체크로 학습 진도를 확인</li>
       </ul></dd>
     </dl></details>
+  <details class="case"><summary class="case-title">4. 폴더블·태블릿·가로형 화면 대응 — 기존 폰 화면은 그대로 두고 넓은 화면만 예외 처리 (찍스·비비 8개 앱)<span class="period">2026.09~10</span></summary>
+    <dl>
+      <dt>배경</dt><dd>기존 배포 앱은 <b>S10 가로 길이 기준 비율</b>로 크기를 계산 → 세로형 폰에서는 문제없었지만 <b>가로가 긴 기기(폴드 펼침·태블릿)에서는 세로 영역이 커지는 문제</b>. 대형 화면에서는 화면 방향·크기 제한 설정(screenOrientation, resizableActivity, min/maxAspectRatio)도 무시됨</dd>
+      <dt>해결</dt><dd><ul>
+        <li>기존 세로형 폰은 그대로 두고 <b>가로형·넓은 화면만 예외 처리</b> — 크기 계산을 ‘화면 비율 크기’와 ‘실제 물리 크기(dp)’ 중 작은 값으로 바꿔, 폰은 기존 배포와 같은 크기·넓은 화면은 상한 적용</li>
+        <li>화면비 2.4 이상·1.3 미만 기기(21:9 = 2.33, 4:3 = 1.33 기준 밖)는 특정 아이콘 수치 예외 처리</li>
+        <li>회전·창 크기 변경 대응 — 화면 방향 portrait → fullUser, 화면 변경 시 앱을 다시 띄우지 않고 크기만 다시 계산, 스크롤 위치·탭 크기 유지, 폴드 접힘·펼침 기준 재계산</li>
+        <li>AI 코딩 도구로 구현</li>
+      </ul></dd>
+      <dt>결과</dt><dd>찍스·비비 8개 앱의 화면 크기 계산을 같은 방식으로 통일 (<a class="more" href="screen.html">자세한 과정 보기</a>)</dd>
+    </dl></details>
   <div class="project">
     <p class="project-title">AI 개발 활용</p>
     <p class="lead">Claude가 어디까지 동작할 수 있는지 직접 확인하며 아래 도구들을 연동해 <b>구현 속도를 높임</b></p>
