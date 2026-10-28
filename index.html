@@ -90,6 +90,25 @@
   .bar .fill { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
   .bar .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
   #career a.more { color: var(--accent); }
+
+  /* 사례 카드 열고 닫기 */
+  details.case { padding: 0; }
+  details.case > summary {
+    list-style: none; cursor: pointer; margin: 0; padding: 18px 48px 18px 22px; position: relative;
+  }
+  details.case > summary::-webkit-details-marker { display: none; }
+  details.case > summary::after {
+    content: ''; position: absolute; right: 22px; top: 50%; width: 9px; height: 9px; margin-top: -7px;
+    border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .15s;
+  }
+  details.case[open] > summary::after { transform: rotate(225deg); margin-top: -2px; }
+  details.case > summary:hover { color: var(--accent); }
+  details.case > dl { padding: 0 22px 20px; }
+  .toggle-all {
+    margin: 0 0 4px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); color: var(--text); font: inherit; font-size: 0.9rem; cursor: pointer;
+  }
+  .toggle-all:hover { border-color: var(--accent); color: var(--accent); }
   @media (max-width: 560px) { .flow svg { min-width: 640px; } .flow { overflow-x: auto; } }
 
   footer { margin-top: 64px; color: var(--muted); font-size: 0.85rem; text-align: center; }
@@ -131,11 +150,11 @@
 
   <section class="block" id="career">
     <h2 class="sec">경력기술서</h2>
+    <button type="button" class="toggle-all" aria-expanded="false">모두 펼치기</button>
     <h2>㈜디지털포토 &nbsp;|&nbsp; 2019.08 ~ 재직중 &nbsp;|&nbsp; 대리 · Android 개발</h2>
 
   <h2>직접 해결한 문제 ① — AI 코딩 도구 도입 후</h2>
-  <div class="case">
-    <p class="case-title">1. 난독화 기능 추가 — 위험성 조사 후 빌드 단계 안전장치 추가 (8개 앱)</p>
+  <details class="case"><summary class="case-title">1. 난독화 기능 추가 — 위험성 조사 후 빌드 단계 안전장치 추가 (8개 앱)</summary>
     <dl>
       <dt>배경</dt><dd>앱에 난독화 기능 추가</dd>
       <dt>위험</dt><dd>조사해 보니 난독화 후 <b>저장해 둔 사용자 데이터(장바구니, 설정 등)를 읽지 못해</b> 실제 배포된 앱에서 오류가 날 위험이 큰 기능이었음</dd>
@@ -144,19 +163,15 @@
         <li>@Keep은 코드에만 있어서 이후 구현하는 사람이 실수로 빠뜨릴 수 있다고 판단 → <b>빌드할 때 위험한 코드를 검사해 빌드를 멈추는 코드(r8-guard.gradle)</b>를 AI에 요청해 추가</li>
       </ul></dd>
       <dt>결과</dt><dd><b>8개 프로젝트에 적용</b>, 배포 후 관련 오류 없음</dd>
-    </dl>
-  </div>
-  <div class="case">
-    <p class="case-title">2. OpenCV 제거 — 리사이저 직접 구현, 테스트 코드로 검증 (찍스 셀프증명 등)</p>
+    </dl></details>
+  <details class="case"><summary class="case-title">2. OpenCV 제거 — 리사이저 직접 구현, 테스트 코드로 검증 (찍스 셀프증명 등)</summary>
     <dl>
       <dt>배경</dt><dd>OpenCV가 일부 기기에서 로딩에 실패하고, Android 16KB 페이지와 호환되지 않고, 앱 용량을 키움. 단계적 축소를 반복하며 대비·채도가 조금씩 변하는 문제도 있었음</dd>
       <dt>해결</dt><dd>OpenCV의 리사이즈 방식을 <b>Kotlin으로 다시 구현</b>하고 1회 축소로 변경 (AI 활용)</dd>
       <dt>검증</dt><dd><b>테스트 코드를 추가</b>해 OpenCV 결과와 비교 — PNG 이미지, <b>줄무늬 셔츠 이미지(축소 시 모아레 현상 확인)</b>, 큰 이미지 → 작은 이미지 축소, 작은 이미지 → 큰 이미지 확대</dd>
       <dt>결과</dt><dd>OpenCV 결과와 <b>픽셀 차이 0~1</b> 유지, 셀프증명 APK <b>49.9MB → 36.8MB</b></dd>
-    </dl>
-  </div>
-  <div class="case">
-    <p class="case-title">3. 셀프증명 코드 최신화 — 바뀐 코드를 익히는 개발자 학습 페이지 제작 (찍스 셀프증명)<span class="period">2026.10</span></p>
+    </dl></details>
+  <details class="case"><summary class="case-title">3. 셀프증명 코드 최신화 — 바뀐 코드를 익히는 개발자 학습 페이지 제작 (찍스 셀프증명)<span class="period">2026.10</span></summary>
     <dl>
       <dt>배경</dt><dd>AI를 도입해 셀프증명 코드를 최신화(Java → Kotlin·코루틴 전환, Hilt 의존성 주입 적용)하면서 코드 구조가 크게 바뀜</dd>
       <dt>해결</dt><dd><ul>
@@ -165,8 +180,7 @@
         <li><b>실제 셀프증명 코드(장바구니 주문 업로드 등)를 예제로</b>, 무엇이 바뀌었는지 → 핵심 개념 → 자주 하는 작업 레시피 → 에러·함정 순서로 구성</li>
         <li>장마다 ‘이해함’ 체크로 학습 진도를 확인</li>
       </ul></dd>
-    </dl>
-  </div>
+    </dl></details>
   <div class="project">
     <p class="project-title">AI 개발 활용</p>
     <p class="lead">Claude가 어디까지 동작할 수 있는지 직접 확인하며 아래 도구들을 연동해 <b>구현 속도를 높임</b></p>
@@ -179,17 +193,14 @@
 
   <h2>직접 해결한 문제 ② — AI 코딩 도구 도입 전</h2>
 
-  <div class="case">
-    <p class="case-title">1. 셀프 증명사진 ‘오이 현상’ 해결 — 최적 촬영 거리 계산 알고리즘 도입 (찍스 셀프증명)</p>
+  <details class="case"><summary class="case-title">1. 셀프 증명사진 ‘오이 현상’ 해결 — 최적 촬영 거리 계산 알고리즘 도입 (찍스 셀프증명)</summary>
     <dl>
       <dt>배경</dt><dd>셀프 증명사진 촬영 시 오이 현상 발생</dd>
       <dt>해결</dt><dd>렌즈의 화각과 사용자와의 거리 값을 활용해, 오이 현상이 적은 <b>최적의 촬영 거리를 계산하는 알고리즘</b> 도입 — 삼각함수(sin·cos)로 각도 계산</dd>
       <dt>결과</dt><dd>여러 기기에서 테스트하여 배포에 성공</dd>
-    </dl>
-  </div>
+    </dl></details>
 
-  <div class="case">
-    <p class="case-title">2. 고해상도 사진 리사이즈 시 화질 저하 해결 (찍스 셀프증명)</p>
+  <details class="case"><summary class="case-title">2. 고해상도 사진 리사이즈 시 화질 저하 해결 (찍스 셀프증명)</summary>
     <dl>
       <dt>배경</dt><dd>고해상도 사진을 작게 리사이즈할 경우 화질 문제 발생</dd>
       <dt>원인</dt><dd>Android 자체 Bitmap API로 큰 해상도를 한 번에 작게 줄이면 해상도가 떨어짐</dd>
@@ -198,25 +209,19 @@
         <li>그래도 화질이 부족해 <b>OpenCV 도입</b></li>
       </ul></dd>
       <dt>결과</dt><dd>OpenCV 도입으로 화질 추가 향상</dd>
-    </dl>
-  </div>
+    </dl></details>
 
-  <div class="case">
-    <p class="case-title">3. 사진 선택 화면 확대·축소 애니메이션 커스텀 구현 (핀치 줌 인/아웃 애니메이션)</p>
+  <details class="case"><summary class="case-title">3. 사진 선택 화면 확대·축소 애니메이션 커스텀 구현 (핀치 줌 인/아웃 애니메이션)</summary>
     <dl>
       <dt>해결</dt><dd><b>2개의 가상 RecyclerView</b>를 만들어 좌표 위치를 계산하고, 이를 바탕으로 확대·축소 애니메이션 구현</dd>
-    </dl>
-  </div>
+    </dl></details>
 
-  <div class="case">
-    <p class="case-title">4. 포토북 복잡한 뷰 터치 조작 기능 구현 (찍스 포토북)</p>
+  <details class="case"><summary class="case-title">4. 포토북 복잡한 뷰 터치 조작 기능 구현 (찍스 포토북)</summary>
     <dl>
       <dt>해결</dt><dd>ActionEvent를 활용해 <b>복잡한 뷰의 터치 조작 기능</b> 구현</dd>
-    </dl>
-  </div>
+    </dl></details>
 
-  <div class="case">
-    <p class="case-title">5. 사진 정보 분석 기능 — MediaStore와 ExifInterface를 나눠 사용 (찍스 사진인화)<span class="period">2020.03 ~ 2022.02</span></p>
+  <details class="case"><summary class="case-title">5. 사진 정보 분석 기능 — MediaStore와 ExifInterface를 나눠 사용 (찍스 사진인화)<span class="period">2020.03 ~ 2022.02</span></summary>
     <dl>
       <dt>배경</dt><dd>사진의 촬영일·회전·가로세로 크기 정보가 필요한데, MediaStore로 읽은 정보는 정확성이 낮고 ExifInterface로 읽은 정보는 정확성이 높음</dd>
       <dt>해결</dt><dd><ul>
@@ -225,39 +230,32 @@
         <li>갤럭시 S22·S9, Android 5 기기 등 다양한 기기에서 테스트해 최적의 동시 처리 개수를 <b>스레드 5개</b>로 설정</li>
       </ul></dd>
       <dt>결과</dt><dd>저사양(Android 5) 기기부터 최신(갤럭시 S22) 기기까지 안정적으로 동작하도록 배포</dd>
-    </dl>
-  </div>
-  <div class="case">
-    <p class="case-title">6. 포토북 편집기 전면 재작성과 Undo/Redo 구현 (찍스 포토북)<span class="period">2020 · 2022</span></p>
+    </dl></details>
+  <details class="case"><summary class="case-title">6. 포토북 편집기 전면 재작성과 Undo/Redo 구현 (찍스 포토북)<span class="period">2020 · 2022</span></summary>
     <dl>
       <dt>해결</dt><dd><ul>
         <li>포토북 편집기를 <b>전면 재작성</b> (2020)</li>
         <li><b>Undo/Redo</b> 구현 — 편집 데이터를 <b>JSON으로 통째로 저장</b>하는 구조를 만들고, 저장하는 시점과 불러오는 시점에 주의해 구현 (2022)</li>
       </ul></dd>
-    </dl>
-  </div>
+    </dl></details>
   <h2>㈜와이파이브 &nbsp;|&nbsp; 2017.02 ~ 2018.07 &nbsp;|&nbsp; 사원 · Android 개발</h2>
-  <div class="case">
-    <p class="case-title">내 차 찾기 서비스 — BLE 비콘 실내 측위와 A* 길찾기</p>
+  <details class="case"><summary class="case-title">내 차 찾기 서비스 — BLE 비콘 실내 측위와 A* 길찾기</summary>
     <dl>
       <dt>배경</dt><dd>지하 주차장에서 내 위치와 주차 위치를 알려 주는 앱</dd>
       <dt>해결</dt><dd><ul>
         <li><b>4방향 BLE 비콘</b>으로 실내 측위</li>
         <li><b>A* 알고리즘을 활용한 길찾기 알고리즘</b> 적용 — 다양한 경로에서도 평균적으로 좋은 성능으로 빠른 길을 찾아 나가는 알고리즘이라 판단해 선택</li>
       </ul></dd>
-    </dl>
-  </div>
+    </dl></details>
 
   <h2>㈜우리요 &nbsp;|&nbsp; 2016.07 ~ 2016.09 &nbsp;|&nbsp; Android 인턴 (전북대 학점연계)</h2>
-  <div class="case">
-    <p class="case-title">전자책(E-Book) 뷰어 개발</p>
+  <details class="case"><summary class="case-title">전자책(E-Book) 뷰어 개발</summary>
     <dl>
       <dt>해결</dt><dd><ul>
         <li>화면 크기에 맞춰 페이지를 나누는 기능 구현</li>
         <li>글자 크기를 바꾸면 페이지 수가 달라지므로, <b>페이지 수 변화 비율로 북마크 위치를 다시 계산</b></li>
       </ul></dd>
-    </dl>
-  </div>
+    </dl></details>
   </section>
 
   
@@ -328,5 +326,21 @@
 
   <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
 </main>
+<script>
+  // 경력기술서 사례 카드 모두 펼치기 / 모두 접기
+  const toggleAll = document.querySelector('.toggle-all');
+  const cards = () => document.querySelectorAll('#career details.case');
+  toggleAll.addEventListener('click', () => {
+    const open = toggleAll.getAttribute('aria-expanded') !== 'true';
+    cards().forEach(d => { d.open = open; });
+    toggleAll.setAttribute('aria-expanded', String(open));
+    toggleAll.textContent = open ? '모두 접기' : '모두 펼치기';
+  });
+  // 다른 곳의 링크(#…)로 들어오면 그 안의 카드를 열어 줌
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', () => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t && t.tagName === 'DETAILS') t.open = true;
+  }));
+</script>
 </body>
 </html>
