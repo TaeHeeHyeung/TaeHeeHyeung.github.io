@@ -14,7 +14,7 @@
   <section class="block" id="modernize">
     <h1 class="page-title">셀프증명 코드 최신화 과정</h1>
     <p class="role">2026.10 · AI 코딩 도구 활용 · ㈜디지털포토</p>
-    <p>AI에 한 번에 맡기지 않고 단계를 나눠 진행했습니다. 단계마다 앱 전체를 테스트해도 최종 Q/A 전에는 어차피 전수 검사가 필요하기 때문에, <b>단계마다는 Claude가 제시한 테스트 항목을 기준으로 바뀐 부분만 확인</b>하며 빠르게 넘어가고, <b>최종 Q/A 요청 전에 전수 검사를 직접 한 뒤 Q/A 테스터에게 요청</b>했습니다.</p>
+    <p>AI에 한 번에 맡기지 않고 단계를 나눠 진행했고, 단계마다 바뀐 부분을 확인한 뒤 마지막에 전수 검사를 거쳐 Q/A에 넘겼습니다.</p>
 
     <figure class="flow" aria-label="작업 순서">
       <svg viewBox="0 0 820 92" role="img">
@@ -42,7 +42,7 @@
       <tr><td class="key">③ Kotlin 전환</td><td>작은 패키지부터 <b>9번에 나눠</b> Java 284개 파일 전환. 빌드 검사(r8-guard)가 .kt 파일도 검사하도록 확장</td><td>바뀌는 양이 가장 커서, 나눠서 진행하고 단계마다 빌드를 확인하기 위해</td></tr>
       <tr><td class="key">④ 코루틴·Hilt</td><td>Thread·CountDownLatch를 화면 수명에 맞는 코루틴으로 정리(6단계), Hilt 의존성 주입, 화면 회전 대응. 이 과정에서 Crashlytics 상위 크래시(1위 여권 크롭, 3위 핀치 줌 등)도 수정</td><td>언어를 바꾼 뒤에야 Kotlin다운 구조로 다듬을 수 있어서</td></tr>
       <tr><td class="key">학습 자료</td><td>Kotlin 유지보수 교육(10장, 퀴즈), Hilt 입문 학습 페이지</td><td>AI가 바꾼 코드를 개발자가 직접 읽고 고칠 수 있게</td></tr>
-      <tr><td class="key">검증</td><td>단계마다: Claude가 제시한 테스트 항목으로 바뀐 부분만 확인<br>마지막: 전수 검사를 직접 한 뒤 Q/A 테스터에게 최종 테스트 요청</td><td>단계마다 전체를 테스트해도 최종 Q/A 전 전수 검사는 어차피 필요해서, 중간 테스트는 바뀐 부분에 집중</td></tr>
+      <tr><td class="key">검증</td><td>단계마다: Claude가 제시한 테스트 항목으로 바뀐 부분만 확인<br>마지막: 앱 화면을 하나씩 직접 확인하는 전수 검사 후 Q/A 테스터에게 최종 테스트 요청</td><td>단계마다 전체를 테스트해도 최종 Q/A 전 전수 검사는 어차피 필요해서, 중간 테스트는 바뀐 부분에 집중</td></tr>
     </table>
 
     <figure class="bars" aria-label="Kotlin 전환 9단계별 파일 수">
@@ -57,7 +57,7 @@
       <div class="bar"><span class="lbl">8 배경 제거</span><span class="track"><span class="fill" style="width:19%"></span></span><span class="num">12</span></div>
       <div class="bar"><span class="lbl">9 여권 조정</span><span class="track"><span class="fill" style="width:51%"></span></span><span class="num">32</span></div>
     </figure>
-    <p class="note">날짜와 파일 수는 셀프증명 저장소의 git 기록 기준입니다. 이 작업은 별도 브랜치에서 진행했고, 배포 전 QA 단계입니다.</p>
+    <p class="note">날짜와 파일 수는 셀프증명 저장소의 git 기록 기준입니다. 이 작업은 별도 브랜치에서 진행했고, 현재 QA 진행 중입니다.</p>
   </section>
 
   <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
