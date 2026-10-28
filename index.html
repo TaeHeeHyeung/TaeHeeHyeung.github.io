@@ -6,113 +6,7 @@
 <title>형태희 — Android Developer Portfolio</title>
 <meta name="description" content="Android 개발자 형태희의 포트폴리오 — 직접 해결한 문제 중심">
 
-<style>
-  :root {
-    --bg: #f6f7f9; --card: #ffffff; --text: #1b1f24; --muted: #5b6470;
-    --accent: #1f4e79; --accent-soft: #eaf1f8; --line: #dde2e8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #12161b; --card: #1a2027; --text: #e6e9ed; --muted: #9aa4b0;
-      --accent: #7fb2e5; --accent-soft: #1f2b38; --line: #2c3540;
-    }
-  }
-  * { box-sizing: border-box; }
-  html { background: var(--bg); }
-  body {
-    margin: 0; color: var(--text); background: var(--bg);
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-    font-size: 16px; line-height: 1.65; word-break: keep-all;
-  }
-  main { max-width: 860px; margin: 0 auto; padding: 48px 16px 80px; }
-
-  header.hero { margin-bottom: 40px; }
-  .hero h1 { margin: 0; font-size: 2.2rem; letter-spacing: -0.02em; }
-  .hero .role { margin: 4px 0 16px; color: var(--muted); font-size: 1.1rem; }
-  .hero .contact a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  .hero .contact a:hover { text-decoration: underline; }
-
-  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 32px; }
-  nav.toc a {
-    padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
-    color: var(--text); text-decoration: none; font-size: 0.9rem; background: var(--card);
-  }
-  nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
-
-  section.block { margin-top: 48px; }
-  section.block > h2.sec {
-    margin: 0 0 16px; font-size: 1.4rem; color: var(--accent);
-    padding-bottom: 6px; border-bottom: 2px solid var(--accent);
-  }
-
-  /* 이력서에서 가져온 내용 */
-  h2 { margin: 36px 0 12px; font-size: 1.2rem; color: var(--accent); }
-  ul { margin: 0; padding-left: 1.2em; }
-  li { margin-bottom: 4px; }
-  b { font-weight: 700; }
-  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
-  td, th { padding: 10px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; font-weight: 400; }
-  th, td.key { background: var(--accent-soft); white-space: nowrap; }
-  colgroup { display: none; }
-
-  .case, .project {
-    margin: 16px 0; padding: 20px 22px; background: var(--card);
-    border: 1px solid var(--line); border-radius: 12px;
-  }
-  .case-title, .project-title { margin: 0 0 12px; font-size: 1.08rem; font-weight: 700; color: var(--text); }
-  .case-title .period, .project-title .period { display: inline-block; margin-left: 8px; color: var(--muted); font-size: 0.9rem; font-weight: 400; }
-  .case dl { display: grid; grid-template-columns: 4.5em 1fr; gap: 6px 12px; margin: 0; }
-  .case dt { color: var(--accent); font-weight: 700; }
-  .case dd { margin: 0; }
-  .lead { margin: 0 0 8px; }
-  .intro, .note { color: var(--muted); font-size: 0.9rem; }
-
-  @media (max-width: 560px) {
-    .hero h1 { font-size: 1.8rem; }
-    .case dl { grid-template-columns: 1fr; gap: 2px; }
-    .case dd { margin-bottom: 8px; }
-    th, td.key { white-space: normal; }
-  }
-  /* 코드 최신화 과정 (포트폴리오 전용) */
-  figure { margin: 20px 0; }
-  .flow svg { width: 100%; height: auto; display: block; }
-  .flow .step rect { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
-  .flow .step.key rect { fill: var(--accent-soft); stroke: var(--accent); }
-  .flow text { fill: var(--text); font-size: 15px; font-weight: 700; text-anchor: middle; font-family: inherit; }
-  .flow text.sub { fill: var(--muted); font-size: 12px; font-weight: 400; }
-  .flow line { stroke: var(--muted); stroke-width: 1.5; }
-  .flow .arrow-head { fill: var(--muted); }
-  table.steps td:nth-child(3) { color: var(--muted); font-size: 0.92rem; }
-  .bars { padding: 16px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
-  .bars figcaption { margin-bottom: 10px; font-weight: 700; }
-  .bar { display: grid; grid-template-columns: 7.5em 1fr 2.5em; align-items: center; gap: 10px; margin: 6px 0; font-size: 0.9rem; }
-  .bar .track { height: 12px; background: var(--accent-soft); border-radius: 6px; overflow: hidden; }
-  .bar .fill { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
-  .bar .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
-  #career a.more { color: var(--accent); }
-
-  /* 사례 카드 열고 닫기 */
-  details.case { padding: 0; }
-  details.case > summary {
-    list-style: none; cursor: pointer; margin: 0; padding: 18px 48px 18px 22px; position: relative;
-  }
-  details.case > summary::-webkit-details-marker { display: none; }
-  details.case > summary::after {
-    content: ''; position: absolute; right: 22px; top: 50%; width: 9px; height: 9px; margin-top: -7px;
-    border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .15s;
-  }
-  details.case[open] > summary::after { transform: rotate(225deg); margin-top: -2px; }
-  details.case > summary:hover { color: var(--accent); }
-  details.case > dl { padding: 0 22px 20px; }
-  .toggle-all {
-    margin: 0 0 4px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
-    background: var(--card); color: var(--text); font: inherit; font-size: 0.9rem; cursor: pointer;
-  }
-  .toggle-all:hover { border-color: var(--accent); color: var(--accent); }
-  @media (max-width: 560px) { .flow svg { min-width: 640px; } .flow { overflow-x: auto; } }
-
-  footer { margin-top: 64px; color: var(--muted); font-size: 0.85rem; text-align: center; }
-</style>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 <main>
@@ -126,7 +20,6 @@
     <a href="#core">핵심 역량</a>
     <a href="#stack">기술 스택</a>
     <a href="#career">경력기술서</a>
-    <a href="#modernize">코드 최신화 과정</a>
     <a href="#edu">학력 · 입상</a>
   </nav>
 
@@ -175,7 +68,7 @@
     <dl>
       <dt>배경</dt><dd>AI를 도입해 셀프증명 코드를 최신화(Java → Kotlin·코루틴 전환, Hilt 의존성 주입 적용)하면서 코드 구조가 크게 바뀜</dd>
       <dt>해결</dt><dd><ul>
-        <li>AI 작업은 한 번에 맡기지 않고 <b>에러 수정 → lint → Kotlin 전환 → 코루틴·Hilt</b> 순서로 나눠 진행. 단계마다는 바뀐 부분만 확인하고, Q/A 요청 전 전수 검사 (<a class="more" href="#modernize">자세한 과정 보기</a>)</li>
+        <li>AI 작업은 한 번에 맡기지 않고 <b>에러 수정 → lint → Kotlin 전환 → 코루틴·Hilt</b> 순서로 나눠 진행. 단계마다는 바뀐 부분만 확인하고, Q/A 요청 전 전수 검사 (<a class="more" href="modernize.html">자세한 과정 보기</a>)</li>
         <li>바뀐 코드를 개발자가 읽고 고칠 수 있도록 <b>학습 페이지 2종을 AI에 요청해 제작</b> — Kotlin 유지보수 교육(10장, 마무리 퀴즈), Hilt 입문</li>
         <li><b>실제 셀프증명 코드(장바구니 주문 업로드 등)를 예제로</b>, 무엇이 바뀌었는지 → 핵심 개념 → 자주 하는 작업 레시피 → 에러·함정 순서로 구성</li>
         <li>장마다 ‘이해함’ 체크로 학습 진도를 확인</li>
@@ -256,55 +149,6 @@
         <li>글자 크기를 바꾸면 페이지 수가 달라지므로, <b>페이지 수 변화 비율로 북마크 위치를 다시 계산</b></li>
       </ul></dd>
     </dl></details>
-  </section>
-
-  
-  <section class="block" id="modernize">
-    <h2 class="sec">상세 · 셀프증명 코드 최신화 과정 (2026.10, AI 코딩 도구 활용)</h2>
-    <p>AI에 한 번에 맡기지 않고 단계를 나눠 진행했습니다. 단계마다 앱 전체를 테스트해도 최종 Q/A 전에는 어차피 전수 검사가 필요하기 때문에, <b>단계마다는 Claude가 제시한 테스트 항목을 기준으로 바뀐 부분만 확인</b>하며 빠르게 넘어가고, <b>최종 Q/A 요청 전에 전수 검사를 직접 한 뒤 Q/A 테스터에게 요청</b>했습니다.</p>
-
-    <figure class="flow" aria-label="작업 순서">
-      <svg viewBox="0 0 820 92" role="img">
-        <title>빌드 기반 → 에러 수정 → lint → Kotlin 전환 → 코루틴·Hilt → 학습 자료</title>
-        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="arrow-head"/></marker></defs>
-        <g class="step"><rect x="2" y="16" width="118" height="60" rx="10"/><text x="61" y="42">빌드 기반</text><text x="61" y="62" class="sub">10/01~10/12</text></g>
-        <line x1="122" y1="46" x2="138" y2="46" marker-end="url(#arr)"/>
-        <g class="step"><rect x="140" y="16" width="118" height="60" rx="10"/><text x="199" y="42">① 에러 수정</text><text x="199" y="62" class="sub">10/13~10/15</text></g>
-        <line x1="260" y1="46" x2="276" y2="46" marker-end="url(#arr)"/>
-        <g class="step"><rect x="278" y="16" width="118" height="60" rx="10"/><text x="337" y="42">② lint</text><text x="337" y="62" class="sub">10/14~10/19</text></g>
-        <line x1="398" y1="46" x2="414" y2="46" marker-end="url(#arr)"/>
-        <g class="step key"><rect x="416" y="16" width="118" height="60" rx="10"/><text x="475" y="42">③ Kotlin 전환</text><text x="475" y="62" class="sub">10/19~10/20</text></g>
-        <line x1="536" y1="46" x2="552" y2="46" marker-end="url(#arr)"/>
-        <g class="step"><rect x="554" y="16" width="118" height="60" rx="10"/><text x="613" y="42">④ 코루틴·Hilt</text><text x="613" y="62" class="sub">10/20~10/21</text></g>
-        <line x1="674" y1="46" x2="690" y2="46" marker-end="url(#arr)"/>
-        <g class="step"><rect x="692" y="16" width="124" height="60" rx="10"/><text x="754" y="42">학습 자료</text><text x="754" y="62" class="sub">10/20~10/21</text></g>
-      </svg>
-    </figure>
-
-    <table class="steps">
-      <tr><th>단계</th><th>한 일</th><th>이 순서로 한 이유</th></tr>
-      <tr><td class="key">빌드 기반</td><td>R8 적용과 빌드 검사(r8-guard), Gradle·AGP·Kotlin 버전 통일, 버전 카탈로그</td><td>8개 앱이 같은 기능을 많이 공유해서, 빌드 설정과 버전을 하나로 통일하기 위해. 빌드 환경을 먼저 고정해 두면, 이후 문제가 생겼을 때 코드 문제인지 빌드 문제인지 바로 구분할 수 있음</td></tr>
-      <tr><td class="key">① 에러 수정</td><td>화면 복원 시 크래시, 여권 크롭 흰 띠 등</td><td>버그가 있는 코드를 그대로 Kotlin으로 옮기지 않기 위해</td></tr>
-      <tr><td class="key">② lint</td><td>메모리 누수(StaticFieldLeak, HandlerLeak), onDraw 안 객체 생성(DrawAllocation), Recycle, Overdraw 등 경고 정리</td><td>Java 상태에서 위험한 코드를 먼저 줄여, 변환할 때 신경 쓸 것을 줄이기 위해</td></tr>
-      <tr><td class="key">③ Kotlin 전환</td><td>작은 패키지부터 <b>9번에 나눠</b> Java 284개 파일 전환. 빌드 검사(r8-guard)가 .kt 파일도 검사하도록 확장</td><td>바뀌는 양이 가장 커서, 나눠서 진행하고 단계마다 빌드를 확인하기 위해</td></tr>
-      <tr><td class="key">④ 코루틴·Hilt</td><td>Thread·CountDownLatch를 화면 수명에 맞는 코루틴으로 정리(6단계), Hilt 의존성 주입, 화면 회전 대응. 이 과정에서 Crashlytics 상위 크래시(1위 여권 크롭, 3위 핀치 줌 등)도 수정</td><td>언어를 바꾼 뒤에야 Kotlin다운 구조로 다듬을 수 있어서</td></tr>
-      <tr><td class="key">학습 자료</td><td>Kotlin 유지보수 교육(10장, 퀴즈), Hilt 입문 학습 페이지</td><td>AI가 바꾼 코드를 개발자가 직접 읽고 고칠 수 있게</td></tr>
-      <tr><td class="key">검증</td><td>단계마다: Claude가 제시한 테스트 항목으로 바뀐 부분만 확인<br>마지막: 전수 검사를 직접 한 뒤 Q/A 테스터에게 최종 테스트 요청</td><td>단계마다 전체를 테스트해도 최종 Q/A 전 전수 검사는 어차피 필요해서, 중간 테스트는 바뀐 부분에 집중</td></tr>
-    </table>
-
-    <figure class="bars" aria-label="Kotlin 전환 9단계별 파일 수">
-      <figcaption>Kotlin 전환 9단계 — 단계별 변환 파일 수 (합계 284개)</figcaption>
-      <div class="bar"><span class="lbl">1 작은 패키지</span><span class="track"><span class="fill" style="width:59%"></span></span><span class="num">37</span></div>
-      <div class="bar"><span class="lbl">2 네트워크·DB</span><span class="track"><span class="fill" style="width:70%"></span></span><span class="num">44</span></div>
-      <div class="bar"><span class="lbl">3 데이터 모델</span><span class="track"><span class="fill" style="width:43%"></span></span><span class="num">27</span></div>
-      <div class="bar"><span class="lbl">4 utils</span><span class="track"><span class="fill" style="width:67%"></span></span><span class="num">42</span></div>
-      <div class="bar"><span class="lbl">5 장바구니 등</span><span class="track"><span class="fill" style="width:56%"></span></span><span class="num">35</span></div>
-      <div class="bar"><span class="lbl">6 사진 선택</span><span class="track"><span class="fill" style="width:40%"></span></span><span class="num">25</span></div>
-      <div class="bar"><span class="lbl">7 카메라·필터</span><span class="track"><span class="fill" style="width:48%"></span></span><span class="num">30</span></div>
-      <div class="bar"><span class="lbl">8 배경 제거</span><span class="track"><span class="fill" style="width:19%"></span></span><span class="num">12</span></div>
-      <div class="bar"><span class="lbl">9 여권 조정</span><span class="track"><span class="fill" style="width:51%"></span></span><span class="num">32</span></div>
-    </figure>
-    <p class="note">날짜와 파일 수는 셀프증명 저장소의 git 기록 기준입니다. 이 작업은 별도 브랜치에서 진행했고, 배포 전 QA 단계입니다.</p>
   </section>
 
   <section class="block" id="edu">
