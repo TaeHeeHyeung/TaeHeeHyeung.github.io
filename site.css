@@ -153,3 +153,4 @@ pre { margin: 12px 0; padding: 14px 16px; background: var(--card); border: 1px s
 .diagram .diffimg { fill: #000000; stroke: var(--muted); stroke-width: 1.5; }
 .diagram .dot1 { fill: #9aa4b0; }
 .diagram text.mono { font-family: Consolas, 'D2Coding', monospace; font-size: 13px; fill: var(--text); }
+.diagram .letterbox { fill: #1b1f24; }

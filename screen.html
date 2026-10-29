@@ -25,6 +25,41 @@
     <p>기존 Play 스토어 버전은 <b>S10 스마트폰의 가로 길이를 기준으로 비율 값</b>을 정해 크기를 계산했습니다. 세로형 폰에서는 모두 비슷한 비율로 보였지만, <b>가로가 긴 기기에서는 세로 영역이 커지는 문제</b>가 생겼습니다.</p>
     <figure class="diagram">
       <svg viewBox="0 0 820 400" role="img">
+        <title>기존 버전의 minAspectRatio 1.7: 태블릿에서 앱이 가운데 좁은 영역에만 표시되고 양옆이 비어 있음</title>
+        <defs>
+          <clipPath id="tabL"><rect x="125" y="40" width="176" height="300"/></clipPath>
+          <marker id="s0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker>
+        </defs>
+        <text x="213" y="24" class="lbl" text-anchor="middle">기존 버전 (태블릿 · 앱 기본값, minAspectRatio 1.7)</text>
+        <rect x="76" y="30" width="274" height="322" rx="16" class="device"/>
+        <rect x="88" y="40" width="250" height="300" rx="6" class="letterbox"/>
+        <rect x="125" y="40" width="176" height="300" class="screen"/>
+        <g clip-path="url(#tabL)">
+          <rect x="125" y="40" width="176" height="36" class="bar"/>
+          <rect x="135" y="52" width="70" height="11" rx="4" class="barline"/>
+          <rect x="135" y="88" width="48" height="48" rx="8" class="icon"/><rect x="189" y="88" width="48" height="48" rx="8" class="icon"/><rect x="243" y="88" width="48" height="48" rx="8" class="icon"/>
+          <rect x="135" y="146" width="48" height="48" rx="8" class="icon"/><rect x="189" y="146" width="48" height="48" rx="8" class="icon"/><rect x="243" y="146" width="48" height="48" rx="8" class="icon"/>
+          <rect x="135" y="204" width="48" height="48" rx="8" class="icon"/><rect x="189" y="204" width="48" height="48" rx="8" class="icon"/><rect x="243" y="204" width="48" height="48" rx="8" class="icon"/>
+          <rect x="135" y="262" width="48" height="48" rx="8" class="icon"/><rect x="189" y="262" width="48" height="48" rx="8" class="icon"/><rect x="243" y="262" width="48" height="48" rx="8" class="icon"/>
+        </g>
+        <line x1="92" y1="190" x2="121" y2="190" class="dim" marker-start="url(#s0)" marker-end="url(#s0)"/>
+        <line x1="305" y1="190" x2="334" y2="190" class="dim" marker-start="url(#s0)" marker-end="url(#s0)"/>
+        <text x="213" y="374" class="bad" text-anchor="middle" style="font-size:14px">앱이 세로로 긴 1.7 비율로 제한되어 가운데에만 표시</text>
+        <text x="213" y="392" class="sub2" text-anchor="middle">태블릿 화면의 양옆이 빈 공간으로 남음</text>
+        
+        <text x="400" y="110" class="lbl">minAspectRatio = 1.7</text>
+        <text x="400" y="136" class="sub2">앱 화면의 세로 : 가로를 최소 1.7 로 강제하는 설정</text>
+        <text x="400" y="156" class="sub2">→ 4:3(1.33) 태블릿에서는 폰처럼 좁은 영역에 표시</text>
+        <text x="400" y="200" class="lbl">사용자가 ‘전체 화면’으로 바꾸면</text>
+        <text x="400" y="226" class="sub2">기기 설정이 minAspectRatio 를 무시하고 화면을 꽉 채움</text>
+        <text x="400" y="246" class="sub2">→ 폭에 비례하는 기존 계산 때문에 아래 그림처럼 커짐</text>
+        <line x1="400" y1="275" x2="400" y2="320" class="dim" marker-end="url(#s0)"/>
+      </svg>
+      <figcaption>기존 버전은 매니페스트의 minAspectRatio 1.7 로 앱 화면 비율을 제한해, 태블릿에서는 가운데 좁은 영역에만 표시되었습니다. (화면 구성을 단순화한 개념 그림)</figcaption>
+    </figure>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 820 400" role="img">
         <title>태블릿 전체 화면: 기존 버전은 아이콘과 상단 바가 지나치게 커지고, 해결 후에는 폰과 같은 실제 크기로 표시</title>
         <defs>
           <clipPath id="tabA"><rect x="70" y="40" width="250" height="300" rx="6"/></clipPath>
