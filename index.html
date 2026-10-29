@@ -170,6 +170,15 @@
         <li><b>갱신이 필요한 데이터는 매번 새로 호출</b>하고, 그 외 데이터는 <b>파일로 내부 저장해 다시 사용</b>하도록 앱에서 직접 나눠 관리</li>
       </ul></dd>
     </dl></details>
+  <details class="case"><summary class="case-title">9. 뷰티 기능 — 얼굴 마스크 영역에만 GLES 보정 적용 (찍스 셀프증명, 2026.01)</summary>
+    <dl>
+      <dt>배경</dt><dd>카메라 미리보기와 저장 사진에 뷰티(피부 보정) 기능 추가</dd>
+      <dt>해결</dt><dd><ul>
+        <li>ML Kit 얼굴 윤곽으로 마스크를 만들어 <b>얼굴 영역에만</b> 보정 — 눈·눈썹은 마스크에서 빼서 선명하게 유지</li>
+        <li>성능을 고려해 마스크는 <b>256×256 저해상도·ALPHA_8</b>(투명도만 저장)로 만들고, 보정은 <b>GLES</b>로 적용</li>
+      </ul></dd>
+      <dt>결과</dt><dd>미리보기·저장 사진 모두 동작. 성능 부담은 남아 개선 과제로 둠</dd>
+    </dl></details>
   <h2>㈜와이파이브 &nbsp;|&nbsp; 2017.02 ~ 2018.07 &nbsp;|&nbsp; 사원 · Android 개발</h2>
   <details class="case"><summary class="case-title">내 차 찾기 서비스 — BLE 비콘 실내 측위와 A* 길찾기</summary>
     <dl>
