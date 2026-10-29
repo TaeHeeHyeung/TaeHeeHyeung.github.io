@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>크롭 화면 직접 구현 — 형태희</title>
+<meta name="description" content="사진인화 크롭 화면 — 화질이 떨어지지 않는 줌 한도 계산과 줌·이동 터치 판별을 외부 라이브러리 없이 직접 구현">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">크롭 화면 직접 구현 — 줌 한도 계산과 줌·이동 판별</h1>
+    <p class="role">2020 · 찍스 사진인화 · ㈜디지털포토</p>
+
+    <h2>배경 — 왜 직접 만들었나</h2>
+    <ul>
+      <li><b>코드를 다 이해해야 나중에 고칠 수 있다</b>고 판단했습니다.</li>
+      <li>외부 라이브러리는 내부 코드를 열어 볼 수 없는 부분이 많아, 문제가 생겼을 때 원인을 찾기 어려웠습니다.</li>
+    </ul>
+
+    <h2>문제 — 너무 확대하면 인화 사진이 흐려짐</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 290" role="img">
+        <title>확대할수록 크롭 영역에 들어가는 원본 픽셀이 줄어들고, 인화지에 필요한 픽셀보다 적어지면 흐려짐</title>
+        <text x="140" y="36" class="lbl" text-anchor="middle">줌 1배</text>
+        <text x="410" y="36" class="lbl" text-anchor="middle">줌 한도</text>
+        <text x="680" y="36" class="lbl" text-anchor="middle">한도 초과</text>
+        <rect x="40" y="60" width="200" height="150" rx="4" class="shot"/>
+        <rect x="50" y="75" width="180" height="120" class="frame"/>
+        <rect x="310" y="60" width="200" height="150" rx="4" class="shot"/>
+        <rect x="355" y="98.5" width="110" height="73" class="frame"/>
+        <rect x="580" y="60" width="200" height="150" rx="4" class="shot"/>
+        <rect x="650" y="115" width="60" height="40" class="frame"/>
+        <text x="140" y="236" class="sub">크롭 영역 픽셀 &gt; 필요 픽셀</text>
+        <text x="410" y="236" class="sub">크롭 영역 픽셀 = 필요 픽셀</text>
+        <text x="680" y="236" class="sub">크롭 영역 픽셀 &lt; 필요 픽셀</text>
+        <text x="140" y="266" class="ok" text-anchor="middle">화질 유지</text>
+        <text x="410" y="266" class="ok" text-anchor="middle">화질 유지 (최대)</text>
+        <text x="680" y="266" class="bad" text-anchor="middle">늘려서 인화 → 흐려짐</text>
+      </svg>
+      <figcaption>회색 사각형은 원본 사진, 주황 테두리는 크롭 영역입니다. 화면에서 사진을 확대하면 원본 기준으로는 <b>크롭 영역이 작아져 들어가는 픽셀 수가 줄어듭니다.</b> 인화지 크기에 필요한 픽셀보다 적어지면 인화할 때 늘려야 해서 흐려지므로, 그 직전까지만 확대되게 막았습니다. (개념 그림)</figcaption>
+    </figure>
+
+    <h2>계산 — 화질에 영향이 없는 최대 줌</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 330" role="img">
+        <title>사진 해상도와 뷰 크기로 크롭 영역의 원본 픽셀을 구하고, 인화지 필요 픽셀과 같은 방향 변끼리 나눠 작은 값을 최대 줌으로 사용</title>
+        <defs><marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="20" y="30" width="230" height="54" rx="8" class="op"/>
+        <text x="135" y="53" class="lbl" text-anchor="middle">사진 해상도</text>
+        <text x="135" y="73" class="sub2" text-anchor="middle">원본 픽셀 크기</text>
+        <rect x="295" y="30" width="230" height="54" rx="8" class="op"/>
+        <text x="410" y="53" class="lbl" text-anchor="middle">사진 뷰 · 크롭 뷰 크기</text>
+        <text x="410" y="73" class="sub2" text-anchor="middle">화면에 그려진 크기</text>
+        <rect x="570" y="30" width="230" height="54" rx="8" class="op"/>
+        <text x="685" y="53" class="lbl" text-anchor="middle">인화지 해상도</text>
+        <text x="685" y="73" class="sub2" text-anchor="middle">사이즈별 필요 픽셀</text>
+        <rect x="100" y="130" width="340" height="54" rx="8" class="op"/>
+        <text x="270" y="153" class="lbl" text-anchor="middle">크롭 영역의 원본 픽셀</text>
+        <text x="270" y="173" class="sub2" text-anchor="middle">화면 크기 비율로 원본 기준 환산</text>
+        <rect x="520" y="130" width="280" height="54" rx="8" class="op"/>
+        <text x="660" y="153" class="lbl" text-anchor="middle">인화지 필요 픽셀</text>
+        <text x="660" y="173" class="sub2" text-anchor="middle">짧은 변 · 긴 변</text>
+        <line x1="135" y1="84" x2="215" y2="128" class="dim" marker-end="url(#c1)"/>
+        <line x1="410" y1="84" x2="330" y2="128" class="dim" marker-end="url(#c1)"/>
+        <line x1="685" y1="84" x2="665" y2="128" class="dim" marker-end="url(#c1)"/>
+        <line x1="270" y1="184" x2="330" y2="228" class="dim" marker-end="url(#c1)"/>
+        <line x1="660" y1="184" x2="540" y2="228" class="dim" marker-end="url(#c1)"/>
+        <rect x="150" y="230" width="520" height="86" rx="8" class="screen"/>
+        <text x="410" y="256" text-anchor="middle">짧은 변 비율 = 크롭 짧은 변 ÷ 인화지 짧은 변</text>
+        <text x="410" y="280" text-anchor="middle">긴 변 비율 = 크롭 긴 변 ÷ 인화지 긴 변</text>
+        <text x="410" y="304" class="fkey" text-anchor="middle">최대 줌 = 둘 중 작은 값 (1보다 작으면 1)</text>
+      </svg>
+      <figcaption>필요한 값은 <b>사진 해상도 · 인화지 해상도 · 크롭 뷰 크기 · 사진 뷰 크기</b> 네 가지입니다. 화면 크기와 원본 크기의 비율로 크롭 영역이 원본에서 몇 픽셀인지 구한 뒤, 인화지에 필요한 픽셀과 <b>같은 방향의 변끼리</b> 나눕니다. 두 방향 중 먼저 한계에 닿는 쪽(작은 값)이 최대 줌이 됩니다.</figcaption>
+    </figure>
+
+    <h2>터치 — 줌인지 이동인지 판별</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 260" role="img">
+        <title>onTouchEvent 로 받은 터치를 이동 감지기와 줌 감지기에 함께 넘기고, 손을 떼면 위치를 보정</title>
+        <defs><marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="20" y="100" width="180" height="60" rx="8" class="op"/>
+        <text x="110" y="126" class="lbl" text-anchor="middle">onTouchEvent</text>
+        <text x="110" y="146" class="sub2" text-anchor="middle">모든 터치 이벤트</text>
+        <text x="110" y="190" class="sub2" text-anchor="middle">두 감지기에 함께 전달</text>
+        <rect x="280" y="30" width="240" height="60" rx="8" class="op"/>
+        <text x="400" y="56" class="lbl" text-anchor="middle">GestureDetector</text>
+        <text x="400" y="76" class="sub2" text-anchor="middle">onScroll → 이동</text>
+        <rect x="280" y="170" width="240" height="60" rx="8" class="op"/>
+        <text x="400" y="196" class="lbl" text-anchor="middle">ScaleGestureDetector</text>
+        <text x="400" y="216" class="sub2" text-anchor="middle">onScale → 줌</text>
+        <rect x="600" y="100" width="200" height="60" rx="8" class="op"/>
+        <text x="700" y="126" class="lbl" text-anchor="middle">손 뗌 → 위치 보정</text>
+        <text x="700" y="146" class="sub2" text-anchor="middle">여백 채움 · 최대 줌 제한</text>
+        <line x1="200" y1="120" x2="278" y2="62" class="dim" marker-end="url(#c2)"/>
+        <line x1="200" y1="140" x2="278" y2="198" class="dim" marker-end="url(#c2)"/>
+        <line x1="520" y1="62" x2="598" y2="120" class="dim" marker-end="url(#c2)"/>
+        <line x1="520" y1="198" x2="598" y2="140" class="dim" marker-end="url(#c2)"/>
+      </svg>
+      <figcaption>onTouch 하나로 처리하면 손가락 수 · 손가락 사이 거리 · 이동량을 모두 직접 계산해야 해서 코드가 복잡해집니다. 그래서 <b>같은 터치 이벤트를 이동 감지기와 줌 감지기에 함께 넘기고</b>, 각각의 결과(onScroll · onScale)로 이동인지 줌인지 나눴습니다.</figcaption>
+    </figure>
+
+    <h2>손을 뗐을 때 보정</h2>
+    <table class="steps">
+      <tr><th>상황</th><th>처리</th></tr>
+      <tr><td class="key">크롭 틀 안에 여백이 생김</td><td>여백이 생긴 방향(가로 또는 세로)이 크롭 틀을 가득 채우도록 다시 확대</td></tr>
+      <tr><td class="key">최대 줌을 넘음</td><td>위에서 계산한 최대 줌으로 되돌림 (애니메이션)</td></tr>
+      <tr><td class="key">줌 직후 이동 끝 처리가 겹침</td><td>사진이 크롭 틀 밖으로 나가는 에러가 있어, 줌이 끝난 뒤에는 이동 끝 처리가 다시 실행되지 않도록 예외처리</td></tr>
+    </table>
+
+    <h2>결과</h2>
+    <p>외부 라이브러리 없이 크롭 화면을 직접 구현해 <b>화질이 떨어지지 않는 범위까지만 확대</b>되게 했습니다. 코드를 모두 알고 있어 이후 수정이 쉬웠고, 이 터치 처리 방식은 <b>포토북 편집 화면의 터치 구현에도 도움</b>이 됐습니다.</p>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+<button type="button" class="to-top" aria-label="맨 위로" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<script>(function(){var b=document.querySelector('.to-top');function f(){b.classList.toggle('show',window.scrollY>400)}window.addEventListener('scroll',f,{passive:true});f()})();</script></body>
+</html>

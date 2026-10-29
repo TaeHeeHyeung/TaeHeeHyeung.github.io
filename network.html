@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>네트워크 코드 규격화 — 형태희</title>
+<meta name="description" content="서버 버전 관리 없이 앱에서 갱신 대상을 나눠 관리 — API 1개 = 클래스 1개 규격과 호출 방법으로 서버 호출·저장된 값 구분">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">네트워크 코드 규격화와 캐시 처리</h1>
+    <p class="role">2022~ · 찍스 사진인화 등 · ㈜디지털포토</p>
+
+    <h2>배경</h2>
+    <p>서버에서 데이터의 <b>갱신 버전을 관리하지 않아</b>, 앱이 언제 새로 받아야 하는지 알 수 없었습니다. 그래서 갱신이 필요한 데이터는 새로 호출하고, 그 외에는 내부에 저장해 다시 쓰도록 <b>앱에서 직접 나눠 관리</b>했습니다. API가 많아도 같은 방식으로 다룰 수 있게 코드 모양을 규격화했습니다.</p>
+
+    <h2>규격 — API 1개 = 클래스 1개</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 290" role="img">
+        <title>Request○○ 클래스 하나에 저장된 값 꺼내기, 갱신 여부로 호출, 실제 서버 호출, 결과 콜백이 같은 이름 규칙으로 들어 있음</title>
+        <rect x="20" y="16" width="780" height="262" rx="10" class="screen"/>
+        <text x="40" y="46" class="lbl">Request○○</text>
+        <text x="160" y="46" class="sub2">API 하나에 클래스 하나 · 모든 API가 같은 모양</text>
+        <rect x="40" y="64" width="740" height="44" rx="6" class="op"/>
+        <text x="60" y="91" class="mono">get○○()</text>
+        <text x="320" y="91">저장된 값 꺼내기 — 메모리 → 내부 저장소, <tspan class="fkey">서버 호출 없음</tspan></text>
+        <rect x="40" y="116" width="740" height="44" rx="6" class="op"/>
+        <text x="60" y="143" class="mono">get○○(context, isRefresh, 콜백)</text>
+        <text x="320" y="143">갱신 여부에 따라 서버 호출 또는 저장된 값 사용</text>
+        <rect x="40" y="168" width="740" height="44" rx="6" class="op"/>
+        <text x="60" y="195" class="mono">get○○_(context, 콜백)</text>
+        <text x="320" y="195">실제 서버 호출 → 성공하면 내부 저장소에 저장</text>
+        <rect x="40" y="220" width="740" height="44" rx="6" class="op"/>
+        <text x="60" y="247" class="mono">interface ○○Callback</text>
+        <text x="320" y="247">결과 전달 — 성공 / 실패</text>
+      </svg>
+      <figcaption>같은 이름 <b>get○○</b> 을 <b>어떻게 부르느냐(인자)</b>로 역할을 나눴습니다. 화면 코드에서는 메서드 이름만 보고도 서버를 부르는지, 저장된 값을 쓰는지 알 수 있습니다. (실제 클래스 이름은 ○○ 로 일반화)</figcaption>
+    </figure>
+
+    <h2>호출 흐름 — 서버를 부를지, 저장된 값을 쓸지</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 330" role="img">
+        <title>isRefresh 가 true 면 서버 호출, false 면 저장된 값이 있을 때 그 값을 쓰고 없을 때만 서버 호출, 서버 결과는 저장 후 콜백</title>
+        <defs><marker id="n1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="20" y="135" width="190" height="70" rx="8" class="op"/>
+        <text x="115" y="164" class="lbl" text-anchor="middle">get○○ 호출</text>
+        <text x="115" y="186" class="sub2" text-anchor="middle">(context, isRefresh, 콜백)</text>
+        <polygon points="300,130 360,170 300,210 240,170" class="op"/>
+        <text x="300" y="175" text-anchor="middle" style="font-size:13px">isRefresh?</text>
+        <rect x="430" y="30" width="180" height="60" rx="8" class="op"/>
+        <text x="520" y="56" class="lbl" text-anchor="middle">서버 호출</text>
+        <text x="520" y="76" class="sub2" text-anchor="middle">get○○_</text>
+        <rect x="650" y="30" width="150" height="60" rx="8" class="op"/>
+        <text x="725" y="56" class="lbl" text-anchor="middle">저장 → 콜백</text>
+        <text x="725" y="76" class="sub2" text-anchor="middle">다음 호출에 재사용</text>
+        <polygon points="470,230 545,270 470,310 395,270" class="op"/>
+        <text x="470" y="275" text-anchor="middle" style="font-size:13px">저장된 값?</text>
+        <rect x="620" y="240" width="180" height="60" rx="8" class="op"/>
+        <text x="710" y="266" class="lbl" text-anchor="middle">저장된 값으로 콜백</text>
+        <text x="710" y="286" class="sub2" text-anchor="middle">서버 호출 없음</text>
+        <line x1="210" y1="170" x2="238" y2="170" class="dim" marker-end="url(#n1)"/>
+        <line x1="330" y1="150" x2="428" y2="72" class="dim" marker-end="url(#n1)"/>
+        <text x="360" y="100" class="sub2">true</text>
+        <line x1="330" y1="190" x2="412" y2="256" class="dim" marker-end="url(#n1)"/>
+        <text x="336" y="236" class="sub2">false</text>
+        <line x1="610" y1="60" x2="648" y2="60" class="dim" marker-end="url(#n1)"/>
+        <line x1="545" y1="270" x2="618" y2="270" class="dim" marker-end="url(#n1)"/>
+        <text x="570" y="262" class="sub2">있음</text>
+        <line x1="470" y1="230" x2="506" y2="92" class="dim" marker-end="url(#n1)"/>
+        <text x="494" y="170" class="sub2">없음</text>
+      </svg>
+      <figcaption>호출하는 쪽이 <b>isRefresh</b> 로 갱신 여부를 정합니다. true 면 무조건 서버에서 새로 받고, false 면 <b>저장된 값이 있을 때는 그 값을 바로 쓰고, 없을 때만 서버를 호출</b>합니다. 서버에서 받은 값은 내부 저장소에 저장해 다음 호출에 다시 씁니다.</figcaption>
+    </figure>
+
+    <h2>호출 방법 비교</h2>
+    <table class="steps">
+      <tr><th>부르는 방법</th><th>서버 호출</th><th>쓰는 곳</th></tr>
+      <tr><td class="key">get○○()</td><td>없음</td><td>화면 표시·가격 계산처럼 이미 받아 둔 값만 필요할 때 (바로 반환)</td></tr>
+      <tr><td class="key">get○○(…, false, 콜백)</td><td>저장된 값이 없을 때만</td><td>있으면 쓰고, 없으면 받아야 하는 경우</td></tr>
+      <tr><td class="key">get○○(…, true, 콜백)</td><td>항상</td><td>갱신이 꼭 필요한 시점</td></tr>
+    </table>
+
+    <h2>앱 시작 시 여러 API를 한 번에 준비</h2>
+    <p>시작 화면에서 여러 API(업데이트 정보, 가격 정보, 액자 옵션 등)를 <b>API마다 갱신 여부를 따로 받아</b> 동시에 준비합니다. 필요한 것만 서버에서 받고 나머지는 저장된 값을 쓰며, <b>모두 끝날 때까지 기다린 뒤</b> 메인 화면으로 넘어갑니다.</p>
+
+    <h2>규격화해서 좋았던 점</h2>
+    <ul>
+      <li>새 API를 추가할 때 <b>같은 모양으로 클래스 하나</b>만 만들면 됨</li>
+      <li>화면 코드에서 <b>메서드를 부르는 방법만 보고도</b> 서버 호출인지, 저장된 값인지 구분됨</li>
+      <li>서버 버전 관리가 없어도 <b>갱신 시점을 앱에서 API별로 정할 수 있음</b></li>
+      <li>응답 파싱 실패는 Crashlytics 에 기록하고 실패 콜백으로 전달하는 방식도 함께 통일</li>
+    </ul>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+<button type="button" class="to-top" aria-label="맨 위로" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<script>(function(){var b=document.querySelector('.to-top');function f(){b.classList.toggle('show',window.scrollY>400)}window.addEventListener('scroll',f,{passive:true});f()})();</script></body>
+</html>
