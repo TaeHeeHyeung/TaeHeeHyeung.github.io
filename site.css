@@ -158,3 +158,13 @@ pre { margin: 12px 0; padding: 14px 16px; background: var(--card); border: 1px s
 .diagram .sensor { fill: var(--accent); }
 .diagram text.fkey { fill: var(--accent); font-weight: 700; }
 .diagram .frame { fill: none; stroke: #c07a00; stroke-width: 2; }
+.diagram .cell { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.2; }
+.diagram .cell.hl { fill: #f6d7a6; stroke: #c07a00; stroke-width: 2; }
+.diagram .cell.fade { opacity: 0.35; }
+.diagram text.cnum { fill: var(--muted); font-size: 11px; }
+.diagram .curve { stroke: var(--accent); stroke-width: 2.5; }
+.diagram .pt { fill: var(--accent); }
+.diagram .pt.hlpt { fill: #c07a00; }
+.diagram .cell.ghost { opacity: 0.35; }
+.diagram .slot { fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.diagram .move { stroke: #c07a00; stroke-width: 2; }

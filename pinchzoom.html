@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>핀치 줌 애니메이션 — 형태희</title>
+<meta name="description" content="사진 선택 화면 핀치 줌 인/아웃 — 열 수가 바뀔 때 사진이 제자리로 미끄러지듯 이동하는 애니메이션 직접 구현">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">사진 선택 화면 핀치 줌 인/아웃 애니메이션</h1>
+    <p class="role">2024.10 · 찍스 셀프증명 등 · ㈜디지털포토</p>
+
+    <h2>배경</h2>
+    <p>회사에서 <b>기본 갤러리 앱처럼 핀치 줌을 할 때 애니메이션 효과</b>를 요청했습니다. 성능 문제와 개발 기간이 늘어날 수 있다고 미리 공유했고, 괜찮다는 답변을 받아 진행했습니다.</p>
+    <p>기존에는 두 손가락으로 벌리거나 오므리면 RecyclerView 의 열 수(3~5열)만 바꿔서, 화면이 <b>툭 끊기며</b> 다시 그려졌습니다.</p>
+
+    <h2>원리 — 바뀌기 전과 후의 배치를 미리 계산</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 330" role="img">
+        <title>3열 배치와 4열 배치를 미리 계산하고, 핀치 정도에 따라 각 사진을 두 위치 사이로 옮김</title>
+        <defs><marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <text x="130" y="36" class="lbl" text-anchor="middle">바뀌기 전 · 3열 (가상 배치 ①)</text>
+        <text x="410" y="36" class="lbl" text-anchor="middle">핀치 중 · 두 위치 사이</text>
+        <text x="690" y="36" class="lbl" text-anchor="middle">바뀐 뒤 · 4열 (가상 배치 ②)</text>
+        <rect x="30" y="60" width="62" height="62" rx="4" class="cell"/><text x="61" y="95" class="cnum" text-anchor="middle">1</text>
+        <rect x="99" y="60" width="62" height="62" rx="4" class="cell"/><text x="130" y="95" class="cnum" text-anchor="middle">2</text>
+        <rect x="168" y="60" width="62" height="62" rx="4" class="cell"/><text x="199" y="95" class="cnum" text-anchor="middle">3</text>
+        <rect x="30" y="129" width="62" height="62" rx="4" class="cell"/><text x="61" y="164" class="cnum" text-anchor="middle">4</text>
+        <rect x="99" y="129" width="62" height="62" rx="4" class="cell hl"/><text x="130" y="164" class="cnum" text-anchor="middle">5</text>
+        <rect x="168" y="129" width="62" height="62" rx="4" class="cell"/><text x="199" y="164" class="cnum" text-anchor="middle">6</text>
+        <rect x="30" y="198" width="62" height="62" rx="4" class="cell"/><text x="61" y="233" class="cnum" text-anchor="middle">7</text>
+        <rect x="99" y="198" width="62" height="62" rx="4" class="cell"/><text x="130" y="233" class="cnum" text-anchor="middle">8</text>
+        <rect x="168" y="198" width="62" height="62" rx="4" class="cell"/><text x="199" y="233" class="cnum" text-anchor="middle">9</text>
+        <rect x="310" y="60" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="379" y="60" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="448" y="60" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="310" y="129" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="379" y="129" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="448" y="129" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="310" y="198" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="379" y="198" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="448" y="198" width="62" height="62" rx="4" class="cell ghost"/>
+        <rect x="310" y="60" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="361.5" y="60" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="413" y="60" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="464.5" y="60" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="310" y="111.5" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="361.5" y="111.5" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="413" y="111.5" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="464.5" y="111.5" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="310" y="163" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="361.5" y="163" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="413" y="163" width="45.5" height="45.5" rx="4" class="slot"/>
+        <rect x="464.5" y="163" width="45.5" height="45.5" rx="4" class="slot"/>
+        <line x1="410" y1="160" x2="332.8" y2="134.3" class="move" marker-end="url(#p1)"/>
+        <rect x="344.5" y="120.3" width="53.8" height="53.8" rx="4" class="cell hl"/><text x="371.4" y="151.1" class="cnum" text-anchor="middle">5</text>
+        <rect x="590" y="60" width="45.5" height="45.5" rx="4" class="cell"/><text x="612.8" y="86" class="cnum" text-anchor="middle">1</text>
+        <rect x="641.5" y="60" width="45.5" height="45.5" rx="4" class="cell"/><text x="664.3" y="86" class="cnum" text-anchor="middle">2</text>
+        <rect x="693" y="60" width="45.5" height="45.5" rx="4" class="cell"/><text x="715.8" y="86" class="cnum" text-anchor="middle">3</text>
+        <rect x="744.5" y="60" width="45.5" height="45.5" rx="4" class="cell"/><text x="767.3" y="86" class="cnum" text-anchor="middle">4</text>
+        <rect x="590" y="111.5" width="45.5" height="45.5" rx="4" class="cell hl"/><text x="612.8" y="137.5" class="cnum" text-anchor="middle">5</text>
+        <rect x="641.5" y="111.5" width="45.5" height="45.5" rx="4" class="cell"/><text x="664.3" y="137.5" class="cnum" text-anchor="middle">6</text>
+        <rect x="693" y="111.5" width="45.5" height="45.5" rx="4" class="cell"/><text x="715.8" y="137.5" class="cnum" text-anchor="middle">7</text>
+        <rect x="744.5" y="111.5" width="45.5" height="45.5" rx="4" class="cell"/><text x="767.3" y="137.5" class="cnum" text-anchor="middle">8</text>
+        <rect x="590" y="163" width="45.5" height="45.5" rx="4" class="cell"/><text x="612.8" y="189" class="cnum" text-anchor="middle">9</text>
+        <rect x="641.5" y="163" width="45.5" height="45.5" rx="4" class="cell"/><text x="664.3" y="189" class="cnum" text-anchor="middle">10</text>
+        <rect x="693" y="163" width="45.5" height="45.5" rx="4" class="cell"/><text x="715.8" y="189" class="cnum" text-anchor="middle">11</text>
+        <rect x="744.5" y="163" width="45.5" height="45.5" rx="4" class="cell"/><text x="767.3" y="189" class="cnum" text-anchor="middle">12</text>
+        <line x1="240" y1="160" x2="300" y2="160" class="dim" marker-end="url(#p1)"/>
+        <line x1="520" y1="160" x2="580" y2="160" class="dim" marker-end="url(#p1)"/>
+        <text x="130" y="300" class="sub2" text-anchor="middle">지금 화면 그대로의 위치·크기</text>
+        <text x="410" y="300" class="sub2" text-anchor="middle">흐린 칸: 지금 자리 · 점선 칸: 바뀔 자리</text>
+        <text x="410" y="318" class="sub2" text-anchor="middle">사진은 오므린 만큼 두 자리 사이로 이동·축소</text>
+        <text x="690" y="300" class="sub2" text-anchor="middle">열 수가 바뀐 뒤의 위치·크기</text>
+      </svg>
+      <figcaption>축소(3열 → 4열) 예시입니다. 실제 목록을 움직이는 대신 <b>바뀌기 전 배치와 바뀐 뒤 배치를 두 개의 가상 RecyclerView 처럼 미리 계산</b>해 두고, 화면 위에 사진 복사본을 올려 두 위치 사이를 이동시킵니다. 주황색 5번 사진은 (2행 2열) → (2행 1열)로 옮겨 갑니다. (개념 그림)</figcaption>
+    </figure>
+
+    <h2>손가락 움직임에 따라 위치 계산</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 870 260" role="img">
+        <title>핀치 scale 1.0 에서 0.5 까지 위치와 크기를 직선으로 보간, 1/10 이상 움직였으면 끝까지 진행</title>
+        <line x1="120" y1="200" x2="620" y2="200" class="axis"/>
+        <line x1="120" y1="200" x2="120" y2="40" class="axis"/>
+        <rect x="120" y="40" width="50" height="160" class="zone"/>
+        <line x1="120" y1="190" x2="600" y2="50" class="curve"/>
+        <circle cx="120" cy="190" r="5" class="pt"/><circle cx="600" cy="50" r="5" class="pt"/>
+        <circle cx="360" cy="120" r="5" class="pt hlpt"/>
+        <text x="120" y="222" class="sub" >1.0</text>
+        <text x="600" y="222" class="sub">0.5</text>
+        <text x="170" y="222" class="sub">0.95</text>
+        <text x="370" y="246" class="sub">손가락을 오므린 정도 (scale)</text>
+        <text x="110" y="194" class="sub2" text-anchor="end">3열 위치</text>
+        <text x="110" y="54" class="sub2" text-anchor="end">4열 위치</text>
+        <text x="372" y="146" class="sub2">scale 0.75 → 두 위치의 중간</text>
+        <text x="145" y="30" class="bad" text-anchor="middle" style="font-size:12px">되돌림 구간</text>
+        <text x="640" y="80" class="lbl">손을 뗐을 때</text>
+        <text x="640" y="104" class="sub2">1/10 미만 움직임 → 원래 열로 복귀</text>
+        <text x="640" y="124" class="sub2">1/10 이상 → 끝까지 진행 후 열 수 변경</text>
+        <text x="640" y="152" class="lbl">남은 애니메이션 시간</text>
+        <text x="640" y="176" class="sub2">50ms + 남은 거리 × 700ms</text>
+        <text x="640" y="196" class="sub2">(조금 남으면 짧게, 많이 남으면 길게)</text>
+      </svg>
+      <figcaption>사진마다 x · y · 너비 · 높이를 <b>scale 1.0(바뀌기 전)과 0.5(바뀐 뒤) 사이에서 직선으로 계산</b>합니다. 확대는 1.0 ~ 1.5 구간을 같은 방식으로 씁니다.</figcaption>
+    </figure>
+
+    <h2>구현 포인트</h2>
+    <table class="steps">
+      <tr><th>항목</th><th>내용</th></tr>
+      <tr><td class="key">가상 배치 2개</td><td>지금 열 수와 바뀔 열 수(±1) 기준으로 보이는 사진의 위치·크기를 미리 계산. 날짜 제목 줄(한 줄 전체를 차지)도 함께 계산</td></tr>
+      <tr><td class="key">애니메이션 전용 레이어</td><td>실제 RecyclerView 는 그대로 두고, 그 위에 사진 복사본을 올려 움직임 → 목록 데이터나 스크롤을 건드리지 않음</td></tr>
+      <tr><td class="key">위치 보간</td><td>핀치 scale 에 따라 x · y · 너비 · 높이를 직선 보간 (확대 1.0~1.5, 축소 1.0~0.5)</td></tr>
+      <tr><td class="key">손을 뗐을 때</td><td>1/10 미만이면 원래 열로 되돌리고, 이상이면 끝까지 이어서 진행. 남은 거리에 비례해 시간을 정해 자연스럽게 마무리</td></tr>
+      <tr><td class="key">마무리</td><td>애니메이션이 끝나면 실제 RecyclerView 의 열 수를 바꾸고 복사본 레이어를 숨김</td></tr>
+    </table>
+
+    <h2>결과</h2>
+    <p>기존 3~5열 구성은 유지하면서, 열 수가 <b>툭 끊기며 바뀌던 화면을 사진이 제자리로 미끄러지듯 이동하며 바뀌도록</b> 개선했습니다. (버벅임 없음)</p>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+</body>
+</html>
