@@ -180,6 +180,15 @@
       </ul></dd>
       <dt>결과</dt><dd>미리보기·저장 사진 모두 동작. 성능 부담은 남아 개선 과제로 둠</dd>
     </dl></details>
+  <details class="case"><summary class="case-title">10. 크롭 화면 직접 구현 — 화질이 떨어지지 않는 줌 한도 계산, 줌·이동 터치 판별 (찍스 사진인화, 2020)</summary>
+    <dl>
+      <dt>배경</dt><dd>외부 라이브러리 대신 크롭 화면을 직접 구현 — <b>코드를 다 이해해야 나중에 고칠 수 있다</b>고 판단했고, 외부 라이브러리는 내부 코드를 열어 볼 수 없는 부분이 많았음</dd>
+      <dt>해결</dt><dd><ul>
+        <li><b>화질에 영향이 없는 줌 한도</b> 계산 — 사진 해상도·인화지 해상도·크롭 뷰 크기·사진 뷰 크기를 <b>가로는 가로끼리, 세로는 세로끼리</b> 비교</li>
+        <li>onTouch만으로 처리하면 코드가 복잡해져, <b>줌 제스처 감지와 onTouch를 함께 사용</b>해 줌인지 이동인지 판별</li>
+      </ul></dd>
+      <dt>결과</dt><dd>이 터치 처리 방식이 이후 포토북 편집 터치 구현에도 도움이 됨</dd>
+    </dl></details>
   <h2>㈜와이파이브 &nbsp;|&nbsp; 2017.02 ~ 2018.07 &nbsp;|&nbsp; 사원 · Android 개발</h2>
   <details class="case"><summary class="case-title">내 차 찾기 서비스 — BLE 비콘 실내 측위와 A* 길찾기</summary>
     <dl>
