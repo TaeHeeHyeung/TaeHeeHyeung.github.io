@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenCV 제거 — 형태희</title>
+<meta name="description" content="OpenCV 리사이즈를 Kotlin 으로 다시 구현하고, OpenCV 결과와 픽셀 단위로 비교해 검증한 과정">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">OpenCV 제거 — 리사이저 직접 구현과 픽셀 단위 검증</h1>
+    <p class="role">2026.10 · 찍스 셀프증명 등 · AI 코딩 도구 활용 · ㈜디지털포토</p>
+
+    <h2>배경</h2>
+    <ul>
+      <li>OpenCV가 일부 기기에서 로딩에 실패</li>
+      <li>Android 16KB 페이지 크기와 호환되지 않음</li>
+      <li>앱 용량을 키움 (셀프증명 APK 49.9MB)</li>
+      <li>단계적 축소를 반복하며 대비·채도가 조금씩 변하는 문제</li>
+    </ul>
+
+    <h2>해결</h2>
+    <p>OpenCV의 리사이즈 방식(축소는 면적 평균, 확대는 Lanczos4)을 <b>Kotlin으로 다시 구현</b>하고, 여러 번 나눠 줄이던 것을 1회 축소로 바꿨습니다. 구현은 AI 코딩 도구를 활용했고, <b>결과가 OpenCV와 같은지는 직접 만든 비교 테스트로 확인</b>했습니다.</p>
+
+    <h2>검증 방법 — 차이를 검은 화면과 로그로 확인</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 250" role="img">
+        <title>같은 원본을 OpenCV 와 새 리사이저로 줄인 뒤, 픽셀마다 차이를 계산해 차이 이미지와 로그로 표시</title>
+        <defs><marker id="o1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        
+        <rect x="20" y="70" width="110" height="110" rx="6" class="screen"/>
+        <g class="stripes"><line x1="35" y1="80" x2="35" y2="170"/><line x1="50" y1="80" x2="50" y2="170"/><line x1="65" y1="80" x2="65" y2="170"/><line x1="80" y1="80" x2="80" y2="170"/><line x1="95" y1="80" x2="95" y2="170"/><line x1="110" y1="80" x2="110" y2="170"/></g>
+        <text x="75" y="205" class="lbl" text-anchor="middle">같은 원본</text>
+        
+        <line x1="134" y1="110" x2="214" y2="70" class="dim" marker-end="url(#o1)"/>
+        <line x1="134" y1="140" x2="214" y2="180" class="dim" marker-end="url(#o1)"/>
+        <rect x="220" y="30" width="80" height="80" rx="6" class="screen"/>
+        <g class="stripes"><line x1="232" y1="38" x2="232" y2="102"/><line x1="244" y1="38" x2="244" y2="102"/><line x1="256" y1="38" x2="256" y2="102"/><line x1="268" y1="38" x2="268" y2="102"/><line x1="280" y1="38" x2="280" y2="102"/><line x1="292" y1="38" x2="292" y2="102"/></g>
+        <text x="310" y="68" class="sub2">OpenCV 결과</text>
+        <rect x="220" y="140" width="80" height="80" rx="6" class="screen"/>
+        <g class="stripes"><line x1="232" y1="148" x2="232" y2="212"/><line x1="244" y1="148" x2="244" y2="212"/><line x1="256" y1="148" x2="256" y2="212"/><line x1="268" y1="148" x2="268" y2="212"/><line x1="280" y1="148" x2="280" y2="212"/><line x1="292" y1="148" x2="292" y2="212"/></g>
+        <text x="310" y="178" class="sub2">새 리사이저 결과</text>
+        
+        <line x1="415" y1="72" x2="460" y2="113" class="dim"/>
+        <line x1="430" y1="178" x2="460" y2="137" class="dim"/>
+        <circle cx="475" cy="125" r="18" class="op"/>
+        <text x="475" y="130" class="lbl" text-anchor="middle">−</text>
+        <text x="475" y="165" class="sub2" text-anchor="middle">픽셀마다 차이</text>
+        <line x1="495" y1="125" x2="560" y2="125" class="dim" marker-end="url(#o1)"/>
+        
+        <rect x="566" y="70" width="110" height="110" rx="6" class="diffimg"/>
+        <circle cx="600" cy="100" r="1.6" class="dot1"/><circle cx="641" cy="132" r="1.6" class="dot1"/><circle cx="618" cy="158" r="1.6" class="dot1"/><circle cx="656" cy="92" r="1.6" class="dot1"/>
+        <text x="621" y="205" class="lbl" text-anchor="middle">차이 이미지</text>
+        <text x="621" y="223" class="sub2" text-anchor="middle">같으면 검정, 다르면 밝게</text>
+        
+        <text x="700" y="96" class="mono">차이 0 : n개</text>
+        <text x="700" y="118" class="mono">차이 1 : n개</text>
+        <text x="700" y="140" class="mono">차이 2 : n개</text>
+        <text x="700" y="162" class="mono">…</text>
+        <text x="745" y="205" class="lbl" text-anchor="middle">로그</text>
+      </svg>
+      <figcaption>같은 원본을 OpenCV와 새 리사이저로 각각 줄인 뒤 픽셀마다 R·G·B·A 값의 차이를 계산했습니다. 차이를 이미지로 그리면 <b>같은 곳은 검정</b>으로 보여 다른 픽셀을 눈으로 바로 찾을 수 있고, 로그에는 <b>차이가 1인 픽셀, 2인 픽셀이 몇 개인지</b> 남겨 숫자로 확인했습니다. (그림의 점과 로그는 형식 예시)</figcaption>
+    </figure>
+
+    <h2>테스트한 경우 — 기능별로 하나씩</h2>
+    <table class="steps">
+      <tr><th>경우</th><th>확인한 것</th></tr>
+      <tr><td class="key">큰 이미지 → 작은 이미지</td><td>축소(면적 평균) 결과가 OpenCV와 같은지</td></tr>
+      <tr><td class="key">작은 이미지 → 큰 이미지</td><td>확대(Lanczos4) 결과가 OpenCV와 같은지</td></tr>
+      <tr><td class="key">PNG (투명 이미지)</td><td>반투명 가장자리 색이 어두워지지 않는지</td></tr>
+      <tr><td class="key">줄무늬 셔츠 이미지</td><td>축소할 때 모아레(줄무늬가 물결처럼 보이는 현상)가 생기지 않는지</td></tr>
+    </table>
+    <p class="note">테스트 화면은 디버그 빌드에만 넣었고, 결과 이미지와 숫자 요약(summary.txt)을 기기의 Download 폴더에 저장해 PC에서도 다시 볼 수 있게 했습니다.</p>
+
+    <h2>결과</h2>
+    <ul>
+      <li>OpenCV 결과와 <b>픽셀 차이 0~1</b> 유지 — 눈으로 구분할 수 없는 수준</li>
+      <li>OpenCV 모듈 삭제로 셀프증명 APK <b>49.9MB → 36.8MB</b></li>
+    </ul>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+</body>
+</html>

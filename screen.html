@@ -23,6 +23,51 @@
 
     <h2>문제 — 가로가 긴 기기에서 세로 영역이 커짐</h2>
     <p>기존 Play 스토어 버전은 <b>S10 스마트폰의 가로 길이를 기준으로 비율 값</b>을 정해 크기를 계산했습니다. 세로형 폰에서는 모두 비슷한 비율로 보였지만, <b>가로가 긴 기기에서는 세로 영역이 커지는 문제</b>가 생겼습니다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 400" role="img">
+        <title>태블릿 전체 화면: 기존 버전은 아이콘과 상단 바가 지나치게 커지고, 해결 후에는 폰과 같은 실제 크기로 표시</title>
+        <defs>
+          <clipPath id="tabA"><rect x="70" y="40" width="250" height="300" rx="6"/></clipPath>
+          <clipPath id="tabB"><rect x="500" y="40" width="250" height="300" rx="6"/></clipPath>
+          <marker id="s1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker>
+        </defs>
+        
+        <text x="195" y="24" class="lbl" text-anchor="middle">기존 버전 (태블릿 · 전체 화면)</text>
+        <rect x="58" y="30" width="274" height="322" rx="16" class="device"/>
+        <rect x="70" y="40" width="250" height="300" rx="6" class="screen"/>
+        <g clip-path="url(#tabA)">
+          <rect x="70" y="40" width="250" height="70" class="bar"/>
+          <rect x="84" y="56" width="120" height="16" rx="4" class="barline"/>
+          <rect x="84" y="80" width="80" height="12" rx="4" class="barline"/>
+          <rect x="84" y="124" width="104" height="104" rx="14" class="icon"/>
+          <rect x="202" y="124" width="104" height="104" rx="14" class="icon"/>
+          <rect x="84" y="242" width="104" height="104" rx="14" class="icon"/>
+          <rect x="202" y="242" width="104" height="104" rx="14" class="icon"/>
+        </g>
+        <text x="195" y="374" class="bad" text-anchor="middle" style="font-size:14px">아이콘·상단 바가 화면 폭에 비례해 지나치게 커짐</text>
+        <text x="195" y="392" class="sub2" text-anchor="middle">한 화면에 보이는 내용이 적고 아래가 잘림</text>
+        
+        <line x1="352" y1="190" x2="478" y2="190" class="dim" marker-end="url(#s1)"/>
+        <text x="415" y="178" class="sub">해결 후</text>
+        
+        <text x="625" y="24" class="lbl" text-anchor="middle">해결 후 (태블릿 · 전체 화면)</text>
+        <rect x="488" y="30" width="274" height="322" rx="16" class="device"/>
+        <rect x="500" y="40" width="250" height="300" rx="6" class="screen"/>
+        <g clip-path="url(#tabB)">
+          <rect x="500" y="40" width="250" height="42" class="bar"/>
+          <rect x="512" y="54" width="80" height="12" rx="4" class="barline"/>
+          <g class="icons">
+            <rect x="514" y="96" width="66" height="66" rx="10" class="icon"/><rect x="592" y="96" width="66" height="66" rx="10" class="icon"/><rect x="670" y="96" width="66" height="66" rx="10" class="icon"/>
+            <rect x="514" y="176" width="66" height="66" rx="10" class="icon"/><rect x="592" y="176" width="66" height="66" rx="10" class="icon"/><rect x="670" y="176" width="66" height="66" rx="10" class="icon"/>
+            <rect x="514" y="256" width="66" height="66" rx="10" class="icon"/><rect x="592" y="256" width="66" height="66" rx="10" class="icon"/><rect x="670" y="256" width="66" height="66" rx="10" class="icon"/>
+          </g>
+        </g>
+        <text x="625" y="374" class="ok" text-anchor="middle" style="font-size:14px">폰과 같은 실제 크기로 상한 적용</text>
+        <text x="625" y="392" class="sub2" text-anchor="middle">넓어진 화면만큼 더 많은 내용이 보임</text>
+      </svg>
+      <figcaption>태블릿에서 앱 표시를 ‘전체 화면’으로 설정했을 때의 모습입니다. 기존에는 화면 폭에 비례해 크기를 계산해서 상단 바와 아이콘이 지나치게 커졌고, 해결 후에는 실제 물리 크기를 상한으로 두어 폰과 비슷한 크기로 보입니다. (화면 구성을 단순화한 개념 그림)</figcaption>
+    </figure>
+
     <p>또한 대형 화면 기기의 전체 화면·멀티 윈도우 모드에서는 아래 설정이 무시됩니다.</p>
     <table>
       <tr><th>설정</th><th>역할</th></tr>
