@@ -157,3 +157,4 @@ pre { margin: 12px 0; padding: 14px 16px; background: var(--card); border: 1px s
 .diagram .phone { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 6 4; }
 .diagram .sensor { fill: var(--accent); }
 .diagram text.fkey { fill: var(--accent); font-weight: 700; }
+.diagram .frame { fill: none; stroke: #c07a00; stroke-width: 2; }

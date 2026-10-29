@@ -58,7 +58,7 @@
       <figcaption>화면의 가이드 크기를 고정하면, 화각이 넓은 기기에서는 얼굴이 작게 찍혀 사용자가 가이드를 채우려고 더 가까이 다가갑니다. 그래서 <b>기기의 렌즈 화각에 맞춰 가이드 크기를 계산</b>해야 어느 기기에서든 같은 거리에서 찍게 됩니다.</figcaption>
     </figure>
 
-    <h2>계산 원리 — 사람 · 렌즈 · 촬영 화면</h2>
+    <h2>계산 원리 — 사람 · 렌즈 · 화면 뷰 · 증명서 규격</h2>
     <figure class="diagram">
       <svg viewBox="0 0 820 260" role="img">
         <title>얼굴 크기, 촬영 거리, 렌즈 화각으로 화면 속 얼굴 크기를 계산</title>
@@ -92,20 +92,27 @@
         
         <line x1="562" y1="120" x2="602" y2="120" class="dim" marker-end="url(#a2)"/>
         <rect x="610" y="40" width="150" height="160" rx="8" class="screen"/>
-        <ellipse cx="685" cy="120" rx="34" ry="46" class="guide"/>
-        <text x="685" y="232" class="lbl" text-anchor="middle">③ 촬영 화면</text>
-        <text x="685" y="250" class="sub2" text-anchor="middle">얼굴 px = 화면 폭 × 얼굴 / 촬영 범위 폭</text>
+        <rect x="644" y="52" width="82" height="136" class="frame"/>
+        <ellipse cx="685" cy="124" rx="30" ry="42" class="guide"/>
+        <line x1="634" y1="82" x2="634" y2="166" class="dim" marker-start="url(#a2)" marker-end="url(#a2)"/>
+        <line x1="736" y1="52" x2="736" y2="188" class="dim" marker-start="url(#a2)" marker-end="url(#a2)"/>
+        <text x="766" y="116" class="sub2">규격</text>
+        <text x="766" y="132" class="sub2">사진</text>
+        <text x="685" y="232" class="lbl" text-anchor="middle">③ 화면 뷰 · 증명서 규격</text>
+        <text x="685" y="250" class="sub2" text-anchor="middle">화면 크기 · 규격 비율 반영</text>
       </svg>
-      <figcaption><b>초점 거리 f</b>는 스마트폰 안에서 렌즈와 이미지 센서 사이의 거리(몇 mm)로, 기기마다 정해진 값을 Camera2에서 읽어 옵니다. <b>촬영 거리 d</b>는 사람과 렌즈 사이의 거리(수십 cm)로, 측정하지 않고 목표값으로 정했습니다. 사용자가 계산된 가이드에 얼굴을 맞추면 자연스럽게 목표 거리 d에 서게 됩니다.</figcaption>
+      <figcaption><b>초점 거리 f</b>는 스마트폰 안에서 렌즈와 이미지 센서 사이의 거리(몇 mm)로, 기기마다 정해진 값을 Camera2에서 읽어 옵니다. <b>촬영 거리 d</b>는 사람과 렌즈 사이의 거리(수십 cm)로, 측정하지 않고 목표값으로 정했습니다. 사용자가 계산된 가이드에 얼굴을 맞추면 자연스럽게 목표 거리 d에 서게 됩니다. 마지막으로 <b>기기마다 다른 화면(미리보기 뷰) 크기</b>로 바꾸고, <b>증명서 규격(여권·주민등록증 등)</b>마다 다른 얼굴 비율로 화면에 그릴 사진 프레임(주황) 크기를 정합니다.</figcaption>
     </figure>
 
     <table class="steps">
       <tr><th>순서</th><th>계산</th><th>의미</th></tr>
       <tr><td class="key">① 화각</td><td>θ = 2 · atan(센서 폭 / (2 × 초점 거리))</td><td>기기마다 다른 렌즈 정보(Camera2 CameraCharacteristics)로 화각을 구함</td></tr>
       <tr><td class="key">② 촬영 범위</td><td>촬영 범위 폭 = 2 · d · tan(θ / 2)</td><td>목표 거리 d에서 카메라에 담기는 실제 폭(mm)</td></tr>
-      <tr><td class="key">③ 가이드 크기</td><td>얼굴 px = 촬영 이미지 폭 × 얼굴 크기 / 촬영 범위 폭</td><td>목표 거리에서 얼굴이 화면에 차지하는 크기 → 이 크기로 가이드를 그림</td></tr>
+      <tr><td class="key">③ 얼굴 크기</td><td>얼굴 px = 촬영 이미지 폭 × 얼굴 크기 / 촬영 범위 폭</td><td>목표 거리에서 얼굴이 <b>촬영 이미지(카메라 원본 해상도)</b>에 차지하는 크기</td></tr>
+      <tr><td class="key">④ 화면 뷰 변환</td><td>× (미리보기 뷰 높이 / 촬영 이미지 높이)</td><td><b>기기마다 화면(미리보기 뷰) 크기가 달라</b> 카메라 원본 픽셀을 화면 픽셀로 바꿈</td></tr>
+      <tr><td class="key">⑤ 증명서 규격</td><td>사진 프레임 높이 = 화면 속 얼굴 × (사진 전체 높이 / 정수리~턱끝 높이)</td><td><b>여권·주민등록증·반명함 등 규격마다 얼굴이 차지하는 비율이 달라</b> 그 비율로 화면에 그릴 사진 프레임(배경) 크기를 정함</td></tr>
     </table>
-    <p class="note">얼굴 크기는 227mm, 목표 거리는 화면 비율별로 25~36cm를 기준으로 했습니다. 사진 종류(여권, 반명함 등)마다 배경 대비 얼굴 비율도 곱해 가이드 크기를 정합니다.</p>
+    <p class="note">얼굴 크기는 227mm, 목표 거리는 화면 비율별로 25~36cm를 기준으로 했습니다. 규격별 ‘사진 전체 높이 / 얼굴 높이’ 비율 예: 여권 약 1.29, 주민등록증·운전면허 약 1.52, 반명함 약 1.84.</p>
 
     <h2>결과</h2>
     <p>사용자가 가이드에 얼굴을 맞추면 기기와 상관없이 <b>정해 둔 거리에서 촬영</b>하게 되어 오이 현상이 줄었고, 여러 기기에서 테스트한 뒤 배포했습니다.</p>
