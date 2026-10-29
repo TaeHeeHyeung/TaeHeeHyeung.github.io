@@ -78,16 +78,25 @@
         <line x1="150" y1="195" x2="434" y2="195" class="dim" marker-start="url(#a2)" marker-end="url(#a2)"/>
         <text x="292" y="187" class="sub" text-anchor="middle">촬영 거리 d</text>
         
+        <rect x="422" y="62" width="140" height="144" rx="12" class="phone"/>
+        <text x="492" y="54" class="sub">스마트폰 카메라</text>
         <rect x="434" y="95" width="14" height="50" rx="4" class="lens"/>
-        <text x="441" y="232" class="lbl" text-anchor="middle">② 렌즈</text>
-        <text x="441" y="250" class="sub2" text-anchor="middle">θ = 2·atan(센서 폭 / 2f)</text>
+        <path d="M441,120 L522,88 M441,120 L522,152" class="ray"/>
+        <rect x="522" y="88" width="7" height="64" class="sensor"/>
+        <line x1="540" y1="90" x2="540" y2="150" class="dim" marker-start="url(#a2)" marker-end="url(#a2)"/>
+        <text x="516" y="84" class="sub2" text-anchor="end">센서 폭</text>
+        <line x1="443" y1="166" x2="522" y2="166" class="dim" marker-start="url(#a2)" marker-end="url(#a2)"/>
+        <text x="482" y="194" class="sub fkey">f (초점 거리)</text>
+        <text x="492" y="232" class="lbl" text-anchor="middle">② 렌즈 · 센서</text>
+        <text x="492" y="250" class="sub2" text-anchor="middle">θ = 2·atan(센서 폭 / 2f)</text>
         
-        <line x1="448" y1="120" x2="600" y2="120" class="dim" marker-end="url(#a2)"/>
+        <line x1="562" y1="120" x2="602" y2="120" class="dim" marker-end="url(#a2)"/>
         <rect x="610" y="40" width="150" height="160" rx="8" class="screen"/>
         <ellipse cx="685" cy="120" rx="34" ry="46" class="guide"/>
         <text x="685" y="232" class="lbl" text-anchor="middle">③ 촬영 화면</text>
         <text x="685" y="250" class="sub2" text-anchor="middle">얼굴 px = 화면 폭 × 얼굴 / 촬영 범위 폭</text>
       </svg>
+      <figcaption><b>초점 거리 f</b>는 스마트폰 안에서 렌즈와 이미지 센서 사이의 거리(몇 mm)로, 기기마다 정해진 값을 Camera2에서 읽어 옵니다. <b>촬영 거리 d</b>는 사람과 렌즈 사이의 거리(수십 cm)로, 측정하지 않고 목표값으로 정했습니다. 사용자가 계산된 가이드에 얼굴을 맞추면 자연스럽게 목표 거리 d에 서게 됩니다.</figcaption>
     </figure>
 
     <table class="steps">
