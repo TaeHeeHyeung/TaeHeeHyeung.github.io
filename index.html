@@ -87,9 +87,16 @@
       </ul></dd>
       <dt>결과</dt><dd>찍스·비비 8개 앱의 화면 크기 계산을 같은 방식으로 통일 (<a class="more" href="screen.html">자세한 과정 보기</a>)</dd>
     </dl></details>
+  <details class="case"><summary class="case-title">5. 줌 조작 개선 — 크롭 중심 기준 확대·축소, 기기별 두 손가락 인식 오류 수정<span class="period">2026.04~05</span></summary>
+    <dl>
+      <dt>해결</dt><dd><ul>
+        <li>크롭 화면의 확대·축소 기준을 <b>크롭 영역 중심점</b>으로 변경 (찍스 셀프증명)</li>
+        <li>특정 기기에서 두 손가락을 가까이 붙인 채 시작하면 <b>한 손가락으로 인식되는 에러</b> → 줌 제스처 감지(ScaleGestureDetector) 대신 <b>onTouch에서 직접 줌을 인식</b>하도록 변경 (사진 선택 화면, 찍스·비비 6개 앱)</li>
+      </ul></dd>
+    </dl></details>
   <div class="project">
     <p class="project-title">AI 개발 활용</p>
-    <p class="lead">Claude가 어디까지 동작할 수 있는지 직접 확인하며 아래 도구들을 연동해 <b>구현 속도를 높임</b></p>
+    <p class="lead">Claude가 어디까지 동작할 수 있는지 직접 확인하다 <b>MCP</b>(외부 도구를 AI에 연결하는 방식)를 알게 되어, 아래 도구들을 연동해 <b>구현 속도를 높임</b></p>
     <ul>
       <li>Figma 연동</li>
       <li>PPT 연동</li>
