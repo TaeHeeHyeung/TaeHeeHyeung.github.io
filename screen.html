@@ -145,7 +145,7 @@
 
     <h2>해결 3 — 회전·창 크기 변경 대응</h2>
     <ul>
-      <li>매니페스트: 화면 방향 portrait → <b>fullUser</b>, configChanges 에 orientation·screenSize·smallestScreenSize·screenLayout·keyboardHidden 추가</li>
+      <li>매니페스트: configChanges 에 orientation·screenSize·smallestScreenSize·screenLayout·keyboardHidden 추가</li>
       <li>화면이 바뀌면 앱을 다시 띄우지 않고 <b>onConfigurationChanged 에서 크기만 다시 계산</b></li>
       <li>RecyclerView 스크롤 위치 유지, Fragment 탭 크기 재설정 확인</li>
       <li>폴드폰은 접었을 때·펼쳤을 때를 기준으로 크기 재계산</li>

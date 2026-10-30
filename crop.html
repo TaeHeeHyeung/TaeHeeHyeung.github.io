@@ -23,32 +23,46 @@
     </ul>
 
     <h2>문제 — 너무 확대하면 인화 사진이 흐려짐</h2>
+    <p>인화지 한 장을 채우는 데 <b>픽셀 9개(3×3)</b>가 필요하다고 해 보겠습니다. 화면의 크롭 틀 크기는 그대로인데, 사진을 확대할수록 틀 안에 들어오는 <b>원본 픽셀 수가 줄어듭니다.</b></p>
     <figure class="diagram">
-      <svg viewBox="0 0 820 290" role="img">
-        <title>확대할수록 크롭 영역에 들어가는 원본 픽셀이 줄어들고, 인화지에 필요한 픽셀보다 적어지면 흐려짐</title>
-        <text x="140" y="36" class="lbl" text-anchor="middle">줌 1배</text>
-        <text x="410" y="36" class="lbl" text-anchor="middle">줌 한도</text>
-        <text x="680" y="36" class="lbl" text-anchor="middle">한도 초과</text>
-        <rect x="40" y="60" width="200" height="150" rx="4" class="shot"/>
-        <rect x="50" y="75" width="180" height="120" class="frame"/>
-        <rect x="310" y="60" width="200" height="150" rx="4" class="shot"/>
-        <rect x="355" y="98.5" width="110" height="73" class="frame"/>
-        <rect x="580" y="60" width="200" height="150" rx="4" class="shot"/>
-        <rect x="650" y="115" width="60" height="40" class="frame"/>
-        <text x="140" y="236" class="sub">크롭 영역 픽셀 &gt; 필요 픽셀</text>
-        <text x="410" y="236" class="sub">크롭 영역 픽셀 = 필요 픽셀</text>
-        <text x="680" y="236" class="sub">크롭 영역 픽셀 &lt; 필요 픽셀</text>
-        <text x="140" y="266" class="ok" text-anchor="middle">화질 유지</text>
-        <text x="410" y="266" class="ok" text-anchor="middle">화질 유지 (최대)</text>
-        <text x="680" y="266" class="bad" text-anchor="middle">늘려서 인화 → 흐려짐</text>
+      <svg viewBox="0 0 820 410" role="img">
+        <title>크롭 틀 안 원본 픽셀이 36개면 9칸으로 줄여 선명, 9개면 1:1로 선명, 4개면 9칸으로 늘려 색이 섞여 흐려짐</title>
+        <defs><marker id="c0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <text x="140" y="34" class="lbl" text-anchor="middle">줌 1배</text>
+        <g style="stroke:var(--card);stroke-width:1"><rect x="80" y="56" width="20" height="20" fill="#1f4e79"/><rect x="100" y="56" width="20" height="20" fill="#1f4e79"/><rect x="120" y="56" width="20" height="20" fill="#cfe0f1"/><rect x="140" y="56" width="20" height="20" fill="#cfe0f1"/><rect x="160" y="56" width="20" height="20" fill="#1f4e79"/><rect x="180" y="56" width="20" height="20" fill="#1f4e79"/><rect x="80" y="76" width="20" height="20" fill="#1f4e79"/><rect x="100" y="76" width="20" height="20" fill="#1f4e79"/><rect x="120" y="76" width="20" height="20" fill="#cfe0f1"/><rect x="140" y="76" width="20" height="20" fill="#cfe0f1"/><rect x="160" y="76" width="20" height="20" fill="#1f4e79"/><rect x="180" y="76" width="20" height="20" fill="#1f4e79"/><rect x="80" y="96" width="20" height="20" fill="#cfe0f1"/><rect x="100" y="96" width="20" height="20" fill="#cfe0f1"/><rect x="120" y="96" width="20" height="20" fill="#1f4e79"/><rect x="140" y="96" width="20" height="20" fill="#1f4e79"/><rect x="160" y="96" width="20" height="20" fill="#cfe0f1"/><rect x="180" y="96" width="20" height="20" fill="#cfe0f1"/><rect x="80" y="116" width="20" height="20" fill="#cfe0f1"/><rect x="100" y="116" width="20" height="20" fill="#cfe0f1"/><rect x="120" y="116" width="20" height="20" fill="#1f4e79"/><rect x="140" y="116" width="20" height="20" fill="#1f4e79"/><rect x="160" y="116" width="20" height="20" fill="#cfe0f1"/><rect x="180" y="116" width="20" height="20" fill="#cfe0f1"/><rect x="80" y="136" width="20" height="20" fill="#1f4e79"/><rect x="100" y="136" width="20" height="20" fill="#1f4e79"/><rect x="120" y="136" width="20" height="20" fill="#cfe0f1"/><rect x="140" y="136" width="20" height="20" fill="#cfe0f1"/><rect x="160" y="136" width="20" height="20" fill="#1f4e79"/><rect x="180" y="136" width="20" height="20" fill="#1f4e79"/><rect x="80" y="156" width="20" height="20" fill="#1f4e79"/><rect x="100" y="156" width="20" height="20" fill="#1f4e79"/><rect x="120" y="156" width="20" height="20" fill="#cfe0f1"/><rect x="140" y="156" width="20" height="20" fill="#cfe0f1"/><rect x="160" y="156" width="20" height="20" fill="#1f4e79"/><rect x="180" y="156" width="20" height="20" fill="#1f4e79"/></g>
+        <rect x="80" y="56" width="120" height="120" class="frame"/>
+        <text x="140" y="198" class="sub">크롭 틀 안 원본 픽셀 36개</text>
+        <line x1="140" y1="208" x2="140" y2="240" class="dim" marker-end="url(#c0)"/>
+        <g style="stroke:var(--card);stroke-width:1"><rect x="95" y="248" width="30" height="30" fill="#1f4e79"/><rect x="125" y="248" width="30" height="30" fill="#cfe0f1"/><rect x="155" y="248" width="30" height="30" fill="#1f4e79"/><rect x="95" y="278" width="30" height="30" fill="#cfe0f1"/><rect x="125" y="278" width="30" height="30" fill="#1f4e79"/><rect x="155" y="278" width="30" height="30" fill="#cfe0f1"/><rect x="95" y="308" width="30" height="30" fill="#1f4e79"/><rect x="125" y="308" width="30" height="30" fill="#cfe0f1"/><rect x="155" y="308" width="30" height="30" fill="#1f4e79"/></g>
+        <rect x="95" y="248" width="90" height="90" fill="none" style="stroke:var(--muted);stroke-width:1.2"/>
+        <text x="140" y="362" class="sub">36개 → 9칸으로 줄임</text>
+        <text x="140" y="392" class="ok" text-anchor="middle">선명</text>
+        <text x="410" y="34" class="lbl" text-anchor="middle">줌 한도</text>
+        <g style="stroke:var(--card);stroke-width:1"><rect x="350" y="56" width="40" height="40" fill="#1f4e79"/><rect x="390" y="56" width="40" height="40" fill="#cfe0f1"/><rect x="430" y="56" width="40" height="40" fill="#1f4e79"/><rect x="350" y="96" width="40" height="40" fill="#cfe0f1"/><rect x="390" y="96" width="40" height="40" fill="#1f4e79"/><rect x="430" y="96" width="40" height="40" fill="#cfe0f1"/><rect x="350" y="136" width="40" height="40" fill="#1f4e79"/><rect x="390" y="136" width="40" height="40" fill="#cfe0f1"/><rect x="430" y="136" width="40" height="40" fill="#1f4e79"/></g>
+        <rect x="350" y="56" width="120" height="120" class="frame"/>
+        <text x="410" y="198" class="sub">크롭 틀 안 원본 픽셀 9개</text>
+        <line x1="410" y1="208" x2="410" y2="240" class="dim" marker-end="url(#c0)"/>
+        <g style="stroke:var(--card);stroke-width:1"><rect x="365" y="248" width="30" height="30" fill="#1f4e79"/><rect x="395" y="248" width="30" height="30" fill="#cfe0f1"/><rect x="425" y="248" width="30" height="30" fill="#1f4e79"/><rect x="365" y="278" width="30" height="30" fill="#cfe0f1"/><rect x="395" y="278" width="30" height="30" fill="#1f4e79"/><rect x="425" y="278" width="30" height="30" fill="#cfe0f1"/><rect x="365" y="308" width="30" height="30" fill="#1f4e79"/><rect x="395" y="308" width="30" height="30" fill="#cfe0f1"/><rect x="425" y="308" width="30" height="30" fill="#1f4e79"/></g>
+        <rect x="365" y="248" width="90" height="90" fill="none" style="stroke:var(--muted);stroke-width:1.2"/>
+        <text x="410" y="362" class="sub">9개 → 9칸에 1:1</text>
+        <text x="410" y="392" class="ok" text-anchor="middle">선명 (최대)</text>
+        <text x="680" y="34" class="lbl" text-anchor="middle">한도 초과</text>
+        <g style="stroke:var(--card);stroke-width:1"><rect x="620" y="56" width="60" height="60" fill="#1f4e79"/><rect x="680" y="56" width="60" height="60" fill="#cfe0f1"/><rect x="620" y="116" width="60" height="60" fill="#cfe0f1"/><rect x="680" y="116" width="60" height="60" fill="#1f4e79"/></g>
+        <rect x="620" y="56" width="120" height="120" class="frame"/>
+        <text x="680" y="198" class="sub">크롭 틀 안 원본 픽셀 4개</text>
+        <line x1="680" y1="208" x2="680" y2="240" class="dim" marker-end="url(#c0)"/>
+        <g style="stroke:var(--card);stroke-width:1"><rect x="635" y="248" width="30" height="30" fill="#1f4e79"/><rect x="665" y="248" width="30" height="30" fill="#7797b5"/><rect x="695" y="248" width="30" height="30" fill="#cfe0f1"/><rect x="635" y="278" width="30" height="30" fill="#7797b5"/><rect x="665" y="278" width="30" height="30" fill="#7797b5"/><rect x="695" y="278" width="30" height="30" fill="#7797b5"/><rect x="635" y="308" width="30" height="30" fill="#cfe0f1"/><rect x="665" y="308" width="30" height="30" fill="#7797b5"/><rect x="695" y="308" width="30" height="30" fill="#1f4e79"/></g>
+        <rect x="635" y="248" width="90" height="90" fill="none" style="stroke:var(--muted);stroke-width:1.2"/>
+        <text x="680" y="362" class="sub">4개 → 9칸으로 늘림</text>
+        <text x="680" y="392" class="bad" text-anchor="middle">색이 섞여 흐려짐</text>
       </svg>
-      <figcaption>회색 사각형은 원본 사진, 주황 테두리는 크롭 영역입니다. 화면에서 사진을 확대하면 원본 기준으로는 <b>크롭 영역이 작아져 들어가는 픽셀 수가 줄어듭니다.</b> 인화지 크기에 필요한 픽셀보다 적어지면 인화할 때 늘려야 해서 흐려지므로, 그 직전까지만 확대되게 막았습니다. (개념 그림)</figcaption>
+      <figcaption>위는 크롭 틀(주황 테두리) 안에 들어온 원본 픽셀, 아래는 인화지의 9칸입니다. 원본 픽셀이 9개보다 많으면 줄여서 채우므로 선명하고, 딱 9개면 1:1로 채우는 가장 크게 확대한 상태입니다. 4개처럼 9개보다 적으면 <b>모자란 칸을 주변 색을 섞어 만들어야 해서</b> 경계가 번지고 흐려집니다. 그래서 원본 픽셀이 인화지 필요 픽셀과 같아지는 지점(줌 한도)까지만 확대되게 막았습니다. (개념 그림 — 실제 인화지는 수백만 픽셀)</figcaption>
     </figure>
 
     <h2>계산 — 화질에 영향이 없는 최대 줌</h2>
     <figure class="diagram">
       <svg viewBox="0 0 820 330" role="img">
-        <title>사진 해상도와 뷰 크기로 크롭 영역의 원본 픽셀을 구하고, 인화지 필요 픽셀과 같은 방향 변끼리 나눠 작은 값을 최대 줌으로 사용</title>
+        <title>사진 해상도와 뷰 크기로 크롭 영역의 원본 픽셀을 구하고, 인화지 필요 픽셀과 짧은 변은 짧은 변끼리, 긴 변은 긴 변끼리 나눠 작은 값을 최대 줌으로 사용</title>
         <defs><marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
         <rect x="20" y="30" width="230" height="54" rx="8" class="op"/>
         <text x="135" y="53" class="lbl" text-anchor="middle">사진 해상도</text>
@@ -75,7 +89,7 @@
         <text x="410" y="280" text-anchor="middle">긴 변 비율 = 크롭 긴 변 ÷ 인화지 긴 변</text>
         <text x="410" y="304" class="fkey" text-anchor="middle">최대 줌 = 둘 중 작은 값 (1보다 작으면 1)</text>
       </svg>
-      <figcaption>필요한 값은 <b>사진 해상도 · 인화지 해상도 · 크롭 뷰 크기 · 사진 뷰 크기</b> 네 가지입니다. 화면 크기와 원본 크기의 비율로 크롭 영역이 원본에서 몇 픽셀인지 구한 뒤, 인화지에 필요한 픽셀과 <b>같은 방향의 변끼리</b> 나눕니다. 두 방향 중 먼저 한계에 닿는 쪽(작은 값)이 최대 줌이 됩니다.</figcaption>
+      <figcaption>필요한 값은 <b>사진 해상도 · 인화지 해상도 · 크롭 뷰 크기 · 사진 뷰 크기</b> 네 가지입니다. 화면 크기와 원본 크기의 비율로 크롭 영역이 원본에서 몇 픽셀인지 구한 뒤, 인화지에 필요한 픽셀과 <b>짧은 변은 짧은 변끼리, 긴 변은 긴 변끼리</b> 나눕니다. 두 방향 중 먼저 한계에 닿는 쪽(작은 값)이 최대 줌이 됩니다.</figcaption>
     </figure>
 
     <h2>터치 — 줌인지 이동인지 판별</h2>
