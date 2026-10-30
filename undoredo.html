@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>포토북 Undo/Redo 모듈 — 형태희</title>
+<meta name="description" content="포토북 편집기 Undo/Redo — UndoRedoManager 로 모듈화해 편집 기능마다 한 줄로 되돌리기를 붙이고, 사진 리스트와 편집 데이터 이력을 나눠 관리">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">포토북 Undo/Redo — 한 줄로 붙이는 되돌리기 모듈</h1>
+    <p class="role">2022 · 찍스 포토북 · ㈜디지털포토</p>
+
+    <h2>배경</h2>
+    <p>포토북 편집 화면에는 사진 이동, 크롭, 배경, 스티커, 간격, 레이아웃 등 편집 기능이 많습니다. 기능마다 되돌리기를 따로 만들면 코드가 흩어지고, 새 기능을 넣을 때마다 되돌리기도 새로 만들어야 합니다. 그래서 되돌리기를 <b>UndoRedoManager 하나로 모으고</b>, 편집 기능은 <b>변경이 끝난 뒤 한 줄만 부르면</b> 되돌리기 대상이 되게 했습니다.</p>
+
+    <h2>구조 — 어떤 편집 기능이든 한 줄로 연결</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 450" role="img">
+        <title>편집 기능들은 saveItem() 한 줄로 UndoRedoManager 의 편집 데이터 이력에 저장하고, 사진을 넣거나 빼는 기능만 putPic·deletePic 으로 사진 리스트 이력에도 기록. 되돌리기 버튼은 pos 를 옮겨 두 이력을 함께 복원</title>
+        <defs><marker id="u1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <text x="20" y="30" class="lbl">편집 데이터만 바뀌는 기능</text>
+        <rect x="20" y="44" width="230" height="34" rx="6" class="op"/><text x="135" y="66" text-anchor="middle">사진 이동 · 위치 변경</text>
+        <rect x="20" y="86" width="230" height="34" rx="6" class="op"/><text x="135" y="108" text-anchor="middle">크롭 저장</text>
+        <rect x="20" y="128" width="230" height="34" rx="6" class="op"/><text x="135" y="150" text-anchor="middle">배경 · 단색 배경</text>
+        <rect x="20" y="170" width="230" height="34" rx="6" class="op"/><text x="135" y="192" text-anchor="middle">스티커 · 글자</text>
+        <rect x="20" y="212" width="230" height="34" rx="6" class="op"/><text x="135" y="234" text-anchor="middle">간격 · 라운드 · 추천 레이아웃</text>
+        <rect x="20" y="254" width="230" height="34" rx="6" class="op"/><text x="135" y="276" text-anchor="middle">책 제목 · 사진틀 삭제</text>
+        <text x="20" y="324" class="lbl">사진 리스트도 바뀌는 기능</text>
+        <rect x="20" y="338" width="230" height="34" rx="6" class="cell hl"/><text x="135" y="360" text-anchor="middle">사진 넣기 (단일 · 자동 · AI)</text>
+        <rect x="20" y="380" width="230" height="34" rx="6" class="cell hl"/><text x="135" y="402" text-anchor="middle">사진 삭제</text>
+
+        <rect x="330" y="44" width="260" height="370" rx="10" class="screen"/>
+        <text x="460" y="72" class="mono" text-anchor="middle" style="font-weight:700">UndoRedoManager</text>
+        <rect x="345" y="88" width="230" height="146" rx="8" class="op"/>
+        <text x="460" y="112" class="lbl" text-anchor="middle">편집 데이터 이력</text>
+        <text x="460" y="132" class="sub2" text-anchor="middle">저장할 때마다 편집 상태 전체를</text>
+        <text x="460" y="150" class="sub2" text-anchor="middle">JSON 으로 쌓음</text>
+        <rect x="362" y="164" width="44" height="32" class="cell"/><text x="384" y="185" class="sub2" text-anchor="middle">0</text>
+        <rect x="412" y="164" width="44" height="32" class="cell"/><text x="434" y="185" class="sub2" text-anchor="middle">1</text>
+        <rect x="462" y="164" width="44" height="32" class="cell hl"/><text x="484" y="185" class="sub2" text-anchor="middle">2</text>
+        <rect x="512" y="164" width="44" height="32" class="cell"/><text x="534" y="185" class="sub2" text-anchor="middle">3</text>
+        <text x="484" y="220" class="sub2" text-anchor="middle">▲ pos (지금 위치)</text>
+        <rect x="345" y="250" width="230" height="150" rx="8" class="op"/>
+        <text x="460" y="274" class="lbl" text-anchor="middle">사진 리스트 이력</text>
+        <text x="460" y="294" class="sub2" text-anchor="middle">pos 번호별로 사진 추가 · 삭제만 기록</text>
+        <text x="460" y="312" class="sub2" text-anchor="middle">편집 이력과 따로 관리</text>
+        <rect x="355" y="330" width="100" height="32" class="cell hl"/><text x="405" y="351" class="sub2" text-anchor="middle">2: 추가</text>
+        <rect x="465" y="330" width="100" height="32" class="cell hl"/><text x="515" y="351" class="sub2" text-anchor="middle">3: 삭제</text>
+        <text x="460" y="386" class="sub2" text-anchor="middle">사진과 관계없는 번호는 비어 있음</text>
+
+        <line x1="252" y1="166" x2="343" y2="160" class="dim" marker-end="url(#u1)"/>
+        <text x="296" y="152" class="mono" text-anchor="middle" style="font-size:11px">saveItem()</text>
+        <line x1="252" y1="356" x2="343" y2="215" class="dim" marker-end="url(#u1)"/>
+        <line x1="252" y1="396" x2="343" y2="350" class="move" marker-end="url(#u1)"/>
+        <text x="135" y="438" class="mono" text-anchor="middle" style="font-size:11px">saveItem() + putPic() / deletePic()</text>
+
+        <rect x="620" y="44" width="180" height="54" rx="8" class="op"/>
+        <text x="710" y="67" class="lbl" text-anchor="middle">되돌리기 · 다시 하기</text>
+        <text x="710" y="87" class="sub2" text-anchor="middle">버튼 왼쪽 · 오른쪽</text>
+        <rect x="620" y="130" width="180" height="54" rx="8" class="op"/>
+        <text x="710" y="153" class="lbl" text-anchor="middle">pos 한 칸 이동</text>
+        <text x="710" y="173" class="sub2" text-anchor="middle">앞 · 뒤 이력 선택</text>
+        <rect x="620" y="216" width="180" height="54" rx="8" class="op"/>
+        <text x="710" y="239" class="lbl" text-anchor="middle">사진 리스트 되돌림</text>
+        <text x="710" y="259" class="sub2" text-anchor="middle">넣었으면 빼고, 뺐으면 넣기</text>
+        <rect x="620" y="302" width="180" height="54" rx="8" class="op"/>
+        <text x="710" y="325" class="lbl" text-anchor="middle">편집 데이터 복원</text>
+        <text x="710" y="345" class="sub2" text-anchor="middle">그 시점 JSON 으로 교체</text>
+        <rect x="620" y="388" width="180" height="40" rx="8" class="screen"/>
+        <text x="710" y="413" class="lbl" text-anchor="middle">화면 다시 그리기</text>
+        <line x1="710" y1="98" x2="710" y2="128" class="dim" marker-end="url(#u1)"/>
+        <line x1="710" y1="184" x2="710" y2="214" class="dim" marker-end="url(#u1)"/>
+        <line x1="710" y1="270" x2="710" y2="300" class="dim" marker-end="url(#u1)"/>
+        <line x1="710" y1="356" x2="710" y2="386" class="dim" marker-end="url(#u1)"/>
+      </svg>
+      <figcaption>편집 기능은 변경이 끝난 뒤 <b>saveItem() 한 줄</b>만 부르면 되돌리기 대상이 됩니다 (현재 코드 기준 25곳). 사진을 넣거나 빼는 기능만 <b>putPic() / deletePic()</b> 을 한 줄 더 부릅니다. 새 편집 기능을 만들어도 되돌리기 코드는 새로 만들 필요가 없습니다.</figcaption>
+    </figure>
+
+    <h2>이력을 둘로 나눈 이유</h2>
+    <p>편집 데이터를 되돌릴 때 사진 리스트까지 함께 되돌려지면 안 되는 경우가 있었습니다. 그래서 <b>사진 리스트는 실제로 사진을 넣거나 뺀 번호에만</b> 기록하고, 되돌릴 때 그 번호가 있을 때만 반대로 적용했습니다. 둘을 나눠 둔 덕분에 <b>편집 데이터 되돌리기와 사진 리스트 되돌리기를 각각 따로 테스트</b>하며 개발했습니다.</p>
+
+    <h2>규칙</h2>
+    <table class="steps">
+      <tr><th>상황</th><th>처리</th></tr>
+      <tr><td class="key">되돌린 뒤 새로 편집</td><td>지금 위치 뒤의 이력은 지우고 새 이력을 추가 — 다시 하기 대상이 없어짐</td></tr>
+      <tr><td class="key">스티커 · 글자 조절 중</td><td>되돌리기 버튼을 숨기고, 조절을 마칠 때 <b>실제로 바뀐 게 있을 때만</b> 이력에 저장</td></tr>
+      <tr><td class="key">페이지 · 화면 이동</td><td>이력 초기화 — 다른 페이지의 편집이 되돌려지지 않게</td></tr>
+      <tr><td class="key">되돌린 직후</td><td>줌 초기화, 사진틀 개수 · 간격 · 라운드 값 다시 표시</td></tr>
+    </table>
+
+    <h2>결과</h2>
+    <p>되돌리기 코드를 한곳에 모아, 편집 기능을 추가할 때마다 <b>한 줄로 되돌리기를 붙일 수</b> 있게 됐습니다. 이후 사진 자동 넣기 · AI 사진 넣기 같은 기능도 같은 방식으로 되돌리기를 지원합니다.</p>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+<button type="button" class="to-top" aria-label="맨 위로" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<script>(function(){var b=document.querySelector('.to-top');function f(){b.classList.toggle('show',window.scrollY>400)}window.addEventListener('scroll',f,{passive:true});f()})();</script></body>
+</html>

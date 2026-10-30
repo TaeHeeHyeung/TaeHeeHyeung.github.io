@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내 차 찾기 서비스 — 형태희</title>
+<meta name="description" content="GPS가 안 되는 지하 주차장에서 BLE 비콘·IMU로 위치를 찾고 A* 로 주차 공간과 내 차까지 안내하는 서비스 (데모)">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">내 차 찾기 서비스 — BLE 비콘 실내 측위와 A* 길찾기</h1>
+    <p class="role">데모 · 아주대학교병원 지하 주차장 · ㈜와이파이브</p>
+
+    <h2>배경</h2>
+    <p>지하 주차장에서는 GPS가 통하지 않습니다. 그래서 주차장에 설치한 <b>블루투스(BLE) 비콘 신호</b>로 사용자 위치를 찾고, <b>빈 주차 공간이나 주차한 위치</b>로 안내하는 서비스를 개발했습니다.</p>
+
+    <h2>사용 흐름</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 130" role="img">
+        <title>주차장 진입 시 앱 자동 실행, 주차 방식 선택, A* 경로 안내, 주차 자동 감지, 내 차 찾기 순서</title>
+        <defs><marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="0" y="16" width="140" height="96" rx="8" class="op"/>
+        <text x="70" y="46" class="lbl" text-anchor="middle">주차장 진입</text>
+        <text x="70" y="70" class="sub2" text-anchor="middle">Wi-Fi 감지</text>
+        <text x="70" y="90" class="sub2" text-anchor="middle">→ 앱 자동 실행</text>
+        <rect x="170" y="16" width="140" height="96" rx="8" class="op"/>
+        <text x="240" y="46" class="lbl" text-anchor="middle">주차 방식 선택</text>
+        <text x="240" y="70" class="sub2" text-anchor="middle">가장 가까운 곳 ·</text>
+        <text x="240" y="90" class="sub2" text-anchor="middle">입구 · 출구 근처</text>
+        <rect x="340" y="16" width="140" height="96" rx="8" class="op"/>
+        <text x="410" y="46" class="lbl" text-anchor="middle">경로 안내</text>
+        <text x="410" y="70" class="sub2" text-anchor="middle">A* 최단 경로</text>
+        <text x="410" y="90" class="sub2" text-anchor="middle">일방통행 반영</text>
+        <rect x="510" y="16" width="140" height="96" rx="8" class="op"/>
+        <text x="580" y="46" class="lbl" text-anchor="middle">주차 자동 감지</text>
+        <text x="580" y="70" class="sub2" text-anchor="middle">걸음 감지로</text>
+        <text x="580" y="90" class="sub2" text-anchor="middle">위치 자동 저장</text>
+        <rect x="680" y="16" width="140" height="96" rx="8" class="op"/>
+        <text x="750" y="46" class="lbl" text-anchor="middle">내 차 찾기</text>
+        <text x="750" y="70" class="sub2" text-anchor="middle">저장한 위치까지</text>
+        <text x="750" y="90" class="sub2" text-anchor="middle">경로 안내</text>
+        <line x1="142" y1="64" x2="168" y2="64" class="dim" marker-end="url(#p1)"/>
+        <line x1="312" y1="64" x2="338" y2="64" class="dim" marker-end="url(#p1)"/>
+        <line x1="482" y1="64" x2="508" y2="64" class="dim" marker-end="url(#p1)"/>
+        <line x1="652" y1="64" x2="678" y2="64" class="dim" marker-end="url(#p1)"/>
+      </svg>
+      <figcaption>주차장에 들어오면 Wi-Fi 를 감지해 앱이 자동으로 실행되고, 걸음 감지 또는 블루투스 연결 감지로 주차를 확인해 차량 위치를 자동 저장합니다.</figcaption>
+    </figure>
+
+    <h2>센서 처리 — 1초 단위로 모아서 계산</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 240" role="img">
+        <title>BLE 신호는 비콘·안테나별로 1초 동안 모으고, IMU 로 회전각을 계산해 1초마다 측위 후 지도에 표시</title>
+        <defs><marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="20" y="30" width="210" height="58" rx="8" class="op"/>
+        <text x="125" y="55" class="lbl" text-anchor="middle">BLE 신호 수신</text>
+        <text x="125" y="75" class="sub2" text-anchor="middle">비콘 안테나가 보내는 신호</text>
+        <rect x="280" y="30" width="240" height="58" rx="8" class="op"/>
+        <text x="400" y="55" class="lbl" text-anchor="middle">비콘·안테나별 세기 저장</text>
+        <text x="400" y="75" class="sub2" text-anchor="middle">1초 동안 HashMap 에 모음</text>
+        <rect x="20" y="150" width="210" height="58" rx="8" class="op"/>
+        <text x="125" y="175" class="lbl" text-anchor="middle">IMU 센서 수신</text>
+        <text x="125" y="195" class="sub2" text-anchor="middle">관성 측정 장치</text>
+        <rect x="280" y="150" width="240" height="58" rx="8" class="op"/>
+        <text x="400" y="175" class="lbl" text-anchor="middle">회전각 계산</text>
+        <text x="400" y="195" class="sub2" text-anchor="middle">비콘을 나간 방향 추정에 사용</text>
+        <rect x="580" y="60" width="220" height="58" rx="8" class="screen"/>
+        <text x="690" y="85" class="lbl" text-anchor="middle">1초마다 측위 계산</text>
+        <text x="690" y="105" class="sub2" text-anchor="middle">진입 · 내부 · 탈출 판단</text>
+        <rect x="580" y="160" width="220" height="58" rx="8" class="op"/>
+        <text x="690" y="185" class="lbl" text-anchor="middle">지도에 위치 표시</text>
+        <text x="690" y="205" class="sub2" text-anchor="middle">모은 신호는 초기화</text>
+        <line x1="232" y1="59" x2="278" y2="59" class="dim" marker-end="url(#p2)"/>
+        <line x1="232" y1="179" x2="278" y2="179" class="dim" marker-end="url(#p2)"/>
+        <line x1="522" y1="59" x2="578" y2="80" class="dim" marker-end="url(#p2)"/>
+        <line x1="522" y1="179" x2="578" y2="102" class="dim" marker-end="url(#p2)"/>
+        <line x1="690" y1="118" x2="690" y2="158" class="dim" marker-end="url(#p2)"/>
+      </svg>
+      <figcaption>BLE 신호는 들어올 때마다 바로 계산하지 않고 <b>1초 동안 비콘·안테나별로 모은 뒤</b> 한 번에 계산합니다. IMU 로 구한 회전각은 비콘을 빠져나갈 때 어느 방향으로 갔는지 추정하는 데 씁니다.</figcaption>
+    </figure>
+
+    <h2>측위 — 비콘 안테나가 가리키는 구역</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 300" role="img">
+        <title>비콘 하나에 4방향 안테나가 있고, 가장 센 비콘의 가장 센 안테나가 가리키는 구역을 현재 위치로 표시</title>
+        <defs><marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="280" y="20" width="100" height="56" rx="4" class="shot"/>
+        <text x="330" y="53" class="sub" >구역</text>
+        <rect x="280" y="224" width="100" height="56" rx="4" class="shot"/>
+        <text x="330" y="257" class="sub">구역</text>
+        <rect x="120" y="122" width="120" height="56" rx="4" class="shot"/>
+        <text x="180" y="155" class="sub">구역</text>
+        <rect x="420" y="122" width="120" height="56" rx="4" class="cell hl"/>
+        <text x="470" y="155" class="sub">구역</text>
+        <circle cx="515" cy="150" r="8" class="pt hlpt"/>
+        <rect x="300" y="120" width="60" height="60" rx="6" class="sensor"/>
+        <text x="330" y="155" text-anchor="middle" style="fill:#ffffff;font-weight:700">비콘</text>
+        <line x1="330" y1="118" x2="330" y2="80" class="dim" marker-end="url(#p3)"/>
+        <line x1="330" y1="182" x2="330" y2="220" class="dim" marker-end="url(#p3)"/>
+        <line x1="298" y1="150" x2="244" y2="150" class="dim" marker-end="url(#p3)"/>
+        <line x1="362" y1="150" x2="416" y2="150" class="move" marker-end="url(#p3)"/>
+        <text x="389" y="140" class="sub2" text-anchor="middle">가장 셈</text>
+        <text x="590" y="70" class="lbl">비콘</text>
+        <text x="590" y="92" class="sub2">4방향 안테나로 각각 신호 송신</text>
+        <text x="590" y="128" class="lbl">안테나</text>
+        <text x="590" y="150" class="sub2">안테나마다 가리키는 구역이 정해짐</text>
+        <text x="590" y="186" class="lbl">구역</text>
+        <text x="590" y="208" class="sub2">지도에 사용자 위치를 표시하는 단위</text>
+        <text x="590" y="244" class="fkey">가장 센 비콘의 가장 센 안테나</text>
+        <text x="590" y="266" class="fkey">→ 가리키는 구역 = 현재 위치</text>
+      </svg>
+      <figcaption>주차장 통로를 <b>구역</b>으로 나누고, 비콘마다 4방향 안테나가 어느 구역을 가리키는지 지도에 정해 두었습니다. 비콘에 <b>들어올 때 · 안에 있을 때 · 나갈 때</b>를 나눠 이전 위치와 이어지는지 확인했습니다. (개념 그림)</figcaption>
+    </figure>
+
+    <table class="steps">
+      <tr><th>상황</th><th>처리</th></tr>
+      <tr><td class="key">비콘 진입<br>(신호 세기 -70 이상)</td><td>이전 구역이 이 비콘과 연결돼 있는지 확인 → 맞으면 <b>진입 회전각 저장</b>, 틀리면 현재 위치가 잘못된 것으로 보고 신호만으로 가장 센 안테나 기준 위치를 다시 잡음</td></tr>
+      <tr><td class="key">비콘 내부</td><td>이 비콘에서 이전 구역을 가리키는 안테나를 저장. 비콘을 빠져나가지 못한 채 비콘 2개 안을 연속으로 지나면 비콘·안테나·구역·회전각을 함께 저장</td></tr>
+      <tr><td class="key">비콘 탈출<br>(신호 세기 -75 미만)</td><td>진입·탈출 <b>회전각으로 나간 방향의 구역을 추정</b>해 이동, 추정에 실패하면 이전 위치를 그대로 표시</td></tr>
+    </table>
+    <p>진입 -70 · 탈출 -75 기준은 현장에서 시험하며 맞춘(튜닝한) 값입니다. 층마다 설치된 비콘의 신호 세기 변화로 <b>층도 자동으로 바뀌게</b> 했습니다.</p>
+
+    <h2>길찾기 — A* 알고리즘</h2>
+    <ul>
+      <li>주차장 지도를 <b>노드와 링크</b>로 만들고, 사용자 위치에서 목적지까지 <b>A* 알고리즘</b>으로 경로를 찾았습니다. 남은 거리를 추정(휴리스틱)하며 찾아 나가서, 다양한 경로에서도 평균적으로 좋은 성능으로 빠른 길을 찾는다고 판단해 선택했습니다.</li>
+      <li><b>일방통행 · 양방통행</b> 제한을 반영해 실제로 갈 수 있는 길 중 가장 짧은 경로로 안내했습니다.</li>
+      <li>주차 방식은 <b>가장 가까운 곳 · 병원 입구 근처 · 출구 근처</b> 중에서 고를 수 있고, 주차 표시등이 있는 주차장은 서버에서 받은 정보로 <b>빈 주차 공간을 일정 주기로 갱신</b>해 표시했습니다.</li>
+    </ul>
+
+    <h2>개발 도구 — 수신 데이터 다시 재생</h2>
+    <p>개발 중 측위 오류를 확인하려고 <b>측위에 쓰는 수신 데이터를 시간별로 기록</b>하고, 앱에서 <b>그대로 다시 재생</b>할 수 있게 했습니다. 실제 차량 주행 로그로 시뮬레이션해 측위 오류를 재현했습니다.</p>
+
+    <h2>결과</h2>
+    <p>아주대학교병원 지하 주차장에서 측위와 차량 위치 저장을 시연했습니다. <a href="https://www.youtube.com/watch?v=TD9VpqAUIDY">데모 영상 보기 (YouTube)</a></p>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+<button type="button" class="to-top" aria-label="맨 위로" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<script>(function(){var b=document.querySelector('.to-top');function f(){b.classList.toggle('show',window.scrollY>400)}window.addEventListener('scroll',f,{passive:true});f()})();</script></body>
+</html>
