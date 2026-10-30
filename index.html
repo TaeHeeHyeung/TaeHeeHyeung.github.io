@@ -211,9 +211,11 @@
   <h2>㈜우리요 &nbsp;|&nbsp; 2016.07 ~ 2016.09 &nbsp;|&nbsp; Android 인턴 (전북대 학점연계)</h2>
   <details class="case"><summary class="case-title">전자책(E-Book) 뷰어 개발</summary>
     <dl>
+      <dt>배경</dt><dd>소설 전자책을 읽는 Android 뷰어 앱 (2명 진행)</dd>
       <dt>해결</dt><dd><ul>
-        <li>화면 크기에 맞춰 페이지를 나누는 기능 구현</li>
-        <li>글자 크기를 바꾸면 페이지 수가 달라지므로, <b>페이지 수 변화 비율로 북마크 위치를 다시 계산</b></li>
+        <li>앱에 넣어 둔 책 파일을 읽어, 오픈소스 Pagination 라이브러리로 <b>화면 크기에 맞춰 페이지를 나누는</b> 기능 구현</li>
+        <li>북마크, 글자 크기 변경, 페이지 넘김 애니메이션, 시크바, 목록 구현</li>
+        <li>글자 크기를 바꾸면 페이지 수가 달라지므로, <b>페이지 수 변화 비율로 북마크 위치를 다시 계산</b> — 새 위치 = 현재 페이지 × (바뀐 뒤 전체 페이지 ÷ 바뀌기 전 전체 페이지), 반올림 (<a class="more" href="ebook.html">계산 그림 보기</a>)</li>
       </ul></dd>
     </dl></details>
   </section>
