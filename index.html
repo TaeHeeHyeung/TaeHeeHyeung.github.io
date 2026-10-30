@@ -208,6 +208,16 @@
       <dt>결과</dt><dd>아주대학교병원 지하 주차장에서 데모 (<a class="more" href="parking.html">자세한 과정 보기</a> · <a href="https://www.youtube.com/watch?v=TD9VpqAUIDY">시연 영상</a>)</dd>
     </dl></details>
 
+  <details class="case"><summary class="case-title">출입 관리 서비스 — 스마트폰 BLE 신호로 터치 없이 출입문 통과<span class="period">2018.04 ~ 2018.05</span></summary>
+    <dl>
+      <dt>배경</dt><dd>터치나 비밀번호 입력 없이 스마트폰만 가지고 출입문을 통과하고, 출입 현황을 경비실에서 모니터링하는 시스템 (3명 — Android 앱 담당, 펌웨어·서버 협업)</dd>
+      <dt>해결</dt><dd><ul>
+        <li>Wi-Fi 신호를 감지하면 <b>블루투스를 자동으로 켜고 끄도록</b> 구현 — 출입문 근처에서만 BLE 사용</li>
+        <li><b>BluetoothLeAdvertiser</b>로 스마트폰 ID를 BLE 신호로 송신 → 출입문 BLE 모듈이 받아 서버에서 ID 확인 후 문 열림</li>
+        <li>출입문에 가까워지면 '문을 여시겠습니까?' 팝업, <b>IMU 센서로 충격을 감지</b>하면 문 열림 메시지 송신</li>
+      </ul></dd>
+      <dt>결과</dt><dd>출입 기록을 서버로 보내 경비실 웹에서 모니터링 (<a class="more" href="access.html">자세한 과정 보기</a> · <a href="https://youtu.be/5A6_IFC0iWA">시연 영상</a>)</dd>
+    </dl></details>
   <h2>㈜우리요 &nbsp;|&nbsp; 2016.07 ~ 2016.09 &nbsp;|&nbsp; Android 인턴 (전북대 학점연계)</h2>
   <details class="case"><summary class="case-title">전자책(E-Book) 뷰어 개발</summary>
     <dl>

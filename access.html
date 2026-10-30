@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>출입 관리 서비스 — 형태희</title>
+<meta name="description" content="스마트폰 BLE 신호로 터치·비밀번호 없이 출입문을 통과하고 출입 기록을 경비실에서 모니터링하는 시스템 — Android 앱 담당">
+
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <a class="back" href="index.html#career">← 경력기술서로 돌아가기</a>
+  <section class="block detail">
+    <h1 class="page-title">출입 관리 서비스 — 스마트폰 BLE 신호로 출입문 통과</h1>
+    <p class="role">2018.04 ~ 2018.05 · 3명 (Android 앱 담당) · ㈜와이파이브</p>
+
+    <h2>배경</h2>
+    <p>출입문을 지날 때마다 따로 터치하거나 비밀번호를 입력하는 번거로움을 없애려고, <b>스마트폰만 가지고 다가가면 문이 열리는</b> 출입 관리 시스템을 만들었습니다. 출입 기록은 서버로 보내 경비실에서 모니터링합니다. Android 앱은 제가 맡았고, 출입문 BLE 모듈 펌웨어와 서버 담당자와 함께 스마트폰 – 펌웨어 – 서버 통신을 맞췄습니다.</p>
+
+    <h2>출입 흐름</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 130" role="img">
+        <title>Wi-Fi 발견, 블루투스 자동 실행, 문 열기 팝업과 충격 감지, 문 열림과 서버 전송 순서</title>
+        <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="0" y="16" width="180" height="96" rx="8" class="op"/>
+        <text x="90" y="46" class="lbl" text-anchor="middle">① Wi-Fi 발견</text>
+        <text x="90" y="70" class="sub2" text-anchor="middle">출입문 근처 Wi-Fi 신호를</text>
+        <text x="90" y="90" class="sub2" text-anchor="middle">감지</text>
+        <rect x="213" y="16" width="180" height="96" rx="8" class="op"/>
+        <text x="303" y="46" class="lbl" text-anchor="middle">② 블루투스 자동 실행</text>
+        <text x="303" y="70" class="sub2" text-anchor="middle">근처에서만 BLE 켜기,</text>
+        <text x="303" y="90" class="sub2" text-anchor="middle">벗어나면 끄기</text>
+        <rect x="426" y="16" width="180" height="96" rx="8" class="op"/>
+        <text x="516" y="46" class="lbl" text-anchor="middle">③ 문 열기 요청</text>
+        <text x="516" y="70" class="sub2" text-anchor="middle">'문을 여시겠습니까?' 팝업</text>
+        <text x="516" y="90" class="sub2" text-anchor="middle">또는 IMU 충격 감지</text>
+        <rect x="640" y="16" width="180" height="96" rx="8" class="cell hl"/>
+        <text x="730" y="46" class="lbl" text-anchor="middle">④ 문 열림</text>
+        <text x="730" y="70" class="sub2" text-anchor="middle">서버에서 ID 확인 후 열림,</text>
+        <text x="730" y="90" class="sub2" text-anchor="middle">출입 기록 서버 전송</text>
+        <line x1="182" y1="64" x2="211" y2="64" class="dim" marker-end="url(#a1)"/>
+        <line x1="395" y1="64" x2="424" y2="64" class="dim" marker-end="url(#a1)"/>
+        <line x1="608" y1="64" x2="638" y2="64" class="dim" marker-end="url(#a1)"/>
+      </svg>
+      <figcaption>블루투스를 항상 켜 두지 않고, <b>Wi-Fi 신호로 출입문 근처에 왔는지 먼저 확인한 뒤</b> 자동으로 켜고 끄게 했습니다. 문 앞에서는 팝업을 누르거나 휴대폰에 충격을 주면(IMU 센서 감지) 문 열림 메시지를 보냅니다.</figcaption>
+    </figure>
+
+    <h2>시스템 구성</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 820 170" role="img">
+        <title>스마트폰 앱이 BLE 로 ID 를 보내면 출입문 BLE·Wi-Fi 보드가 받아 라즈베리파이를 거쳐 서버에서 확인하고, 경비실 웹에서 출입 기록을 봄</title>
+        <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="head"/></marker></defs>
+        <rect x="0" y="40" width="170" height="80" rx="8" class="cell hl"/>
+        <text x="85" y="72" class="lbl" text-anchor="middle">스마트폰 앱</text>
+        <text x="85" y="96" class="sub2" text-anchor="middle">Android · 담당</text>
+        <rect x="216" y="40" width="180" height="80" rx="8" class="op"/>
+        <text x="306" y="72" class="lbl" text-anchor="middle">출입문 보드</text>
+        <text x="306" y="96" class="sub2" text-anchor="middle">BLE(NRF51822) · MCU(STM32)</text>
+        <rect x="442" y="40" width="150" height="80" rx="8" class="op"/>
+        <text x="517" y="72" class="lbl" text-anchor="middle">라즈베리파이 3</text>
+        <text x="517" y="96" class="sub2" text-anchor="middle">데이터 전송</text>
+        <rect x="638" y="40" width="182" height="80" rx="8" class="op"/>
+        <text x="729" y="72" class="lbl" text-anchor="middle">서버 (Tomcat)</text>
+        <text x="729" y="96" class="sub2" text-anchor="middle">ID 확인 · 경비실 웹</text>
+        <line x1="172" y1="80" x2="214" y2="80" class="move" marker-end="url(#a2)"/>
+        <text x="193" y="30" class="sub2" text-anchor="middle">BLE 광고</text>
+        <line x1="398" y1="80" x2="440" y2="80" class="dim" marker-end="url(#a2)"/>
+        <line x1="594" y1="80" x2="636" y2="80" class="dim" marker-end="url(#a2)"/>
+        <text x="410" y="150" class="sub2" text-anchor="middle">스마트폰 ID 를 BLE 신호에 실어 보내면, 출입문에서 받아 서버로 확인 요청</text>
+      </svg>
+      <figcaption>앱에서는 <b>BluetoothLeAdvertiser</b> 로 스마트폰 ID 를 BLE 광고 신호에 실어 보내고, 송신 결과는 AdvertiseCallback 으로 받았습니다. 출입문 보드 · 라즈베리파이 · 서버는 팀원과 나눠 개발했습니다.</figcaption>
+    </figure>
+
+    <h2>Android 앱에서 한 일</h2>
+    <table class="steps">
+      <tr><th>기능</th><th>내용</th></tr>
+      <tr><td class="key">블루투스 자동 제어</td><td>Wi-Fi 신호를 감지해 출입문 근처에서만 블루투스를 자동으로 켜고 끔</td></tr>
+      <tr><td class="key">ID 송신</td><td>BluetoothLeAdvertiser 로 스마트폰 ID 를 BLE 신호로 송신, AdvertiseCallback 으로 결과 확인</td></tr>
+      <tr><td class="key">문 열기 요청</td><td>'문을 여시겠습니까?' 팝업, IMU 센서로 충격을 감지하면 문 열림 메시지 송신</td></tr>
+      <tr><td class="key">측위 화면</td><td>측위 기능 UI 구현</td></tr>
+    </table>
+
+    <h2>결과</h2>
+    <p>출입문 통과와 출입 기록 전송을 시연했고, 경비실 웹에서 연 · 월 · 일 · 시간 · ID · 건물 · 층 · 호실별 출입 기록을 볼 수 있습니다. <a href="https://youtu.be/5A6_IFC0iWA">시연 영상 보기 (YouTube)</a></p>
+  </section>
+
+  <footer>© 형태희 · 회사 소스 코드와 내부 자료는 포함하지 않았습니다.</footer>
+</main>
+<button type="button" class="to-top" aria-label="맨 위로" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<script>(function(){var b=document.querySelector('.to-top');function f(){b.classList.toggle('show',window.scrollY>400)}window.addEventListener('scroll',f,{passive:true});f()})();</script></body>
+</html>
