@@ -26,8 +26,8 @@
     <h2 class="sec">기술 스택</h2>
     <table>
     <colgroup><col style="width:20%"><col></colgroup>
-    <tr><td class="key">능숙하게 사용</td><td>Java, SQL(SQLite), Camera1, ViewBinding, Custom View, Glide, Retrofit, OkHttp, Gson, WebView(JavaScript Bridge), FCM·핑거푸시, Airbridge·AppsFlyer, Firebase Crashlytics, Git, SourceTree, Claude Code(AI 코딩 에이전트)</td></tr>
-    <tr><td class="key">사용 경험 있음</td><td>Kotlin, Coroutines, Hilt, ML Kit Face Detection, ARCore, OpenCV, 카카오·네이버·구글·LINE 로그인, Gradle(버전 카탈로그, 커스텀 Task), GitHub, Bitbucket, TeamGantt, Trello, MCP 연동</td></tr>
+    <tr><td class="key">능숙하게 사용</td><td>Java, SQL(SQLite), Camera1, ViewBinding, Custom View, Glide, Gson, WebView(JavaScript Bridge), FCM·핑거푸시, Airbridge·AppsFlyer, Firebase Crashlytics, Git, SourceTree, Claude Code(AI 코딩 에이전트)</td></tr>
+    <tr><td class="key">사용 경험 있음</td><td>Kotlin, Coroutines, Hilt, OkHttp·Retrofit, ML Kit Face Detection, ARCore, OpenCV, 카카오·네이버·구글·LINE 로그인, Gradle(버전 카탈로그, 커스텀 Task), GitHub, Bitbucket, TeamGantt, Trello, MCP 연동</td></tr>
     <tr><td class="key">AI 코딩 도구로 적용</td><td>Camera2(Camera1 직접 개발 후 AI로 마이그레이션), OpenGL ES 2/3·GLSL, MediaCodec·MediaMuxer, ViewModel·SavedStateHandle, Activity Result API, WorkManager, R8/ProGuard, Android Lint</td></tr>
   </table>
   </section>
@@ -40,15 +40,15 @@
   <table class="small">
     <colgroup><col style="width:26%"><col style="width:12%"><col style="width:12%"><col style="width:26%"><col style="width:12%"><col style="width:12%"></colgroup>
     <tr><th>찍스 (국내)</th><th>다운로드</th><th>평점</th><th>비비 (일본)</th><th>다운로드</th><th>평점</th></tr>
-    <tr><td>찍스 사진인화</td><td>100만+</td><td>4.9</td><td>비비 사진인화</td><td>50만+</td><td>4.8</td></tr>
-    <tr><td>찍스 셀프증명</td><td>50만+</td><td>4.7</td><td>파샤토 (증명사진)</td><td>100만+</td><td>3.1</td></tr>
-    <tr><td>찍스 포토북</td><td>10만+</td><td>4.7</td><td>비비 포토북</td><td>1만+</td><td>4.5</td></tr>
-    <tr><td>찍스 MY네컷</td><td>5만+</td><td>4.4</td><td>비비 연하장</td><td>1만+</td><td>4.4</td></tr>
+    <tr><td><a href="https://play.google.com/store/apps/details?id=com.zzixx">찍스 사진인화</a></td><td>100만+</td><td>4.9</td><td><a href="https://play.google.com/store/apps/details?id=jp.co.vivipri.app">비비 사진인화</a></td><td>50만+</td><td>4.8</td></tr>
+    <tr><td><a href="https://play.google.com/store/apps/details?id=com.zzixx.idphoto">찍스 셀프증명</a></td><td>50만+</td><td>4.7</td><td><a href="https://play.google.com/store/apps/details?id=jp.co.idphoto">파샤토 (증명사진)</a></td><td>100만+</td><td>3.1</td></tr>
+    <tr><td><a href="https://play.google.com/store/apps/details?id=com.zzixx.dicabook">찍스 포토북</a></td><td>10만+</td><td>4.7</td><td><a href="https://play.google.com/store/apps/details?id=com.vivipri.photobook">비비 포토북</a></td><td>1만+</td><td>4.5</td></tr>
+    <tr><td><a href="https://play.google.com/store/apps/details?id=com.zzixx.lifephoto">찍스 MY네컷</a></td><td>5만+</td><td>4.4</td><td><a href="https://play.google.com/store/apps/details?id=jp.co.vivipri.postcard">비비 연하장</a></td><td>1만+</td><td>4.4</td></tr>
   </table>
-  <p class="note">Google Play 기준 (2026.10)</p>
+  <p class="note">Google Play 기준 (2026.10) · 앱 이름을 누르면 Play 스토어로 이동</p>
 
-  <h2>직접 해결한 문제 ① — AI 코딩 도구 도입 후 (2026.04 도입, 2026.08부터 본격 활용)</h2>
-  <details class="case"><summary class="case-title">1. 난독화(R8) 도입 — AI 결과를 그대로 쓰지 않고 위험 요소를 직접 판단, 빌드 단계 안전장치 추가 (8개 앱)</summary>
+  <h2>직접 해결한 문제 ① — AI 코딩 도구 도입 후 (2026.01부터 활용, 2026.08부터 본격 활용)</h2>
+  <details class="case"><summary class="case-title">1. 난독화(R8) 도입 — AI 결과를 그대로 쓰지 않고 위험 요소를 직접 판단, 빌드 단계 안전장치 추가 (8개 앱)<span class="period">2026.09~10</span></summary>
     <dl>
       <dt>배경</dt><dd>Play Console에서 ‘DEX 코드 최적화 기준 미달(난독화 1%)’ 경고 → 난독화 도입 필요</dd>
       <dt>위험</dt><dd>조사해 보니 난독화 후 <b>저장해 둔 사용자 데이터(장바구니, 설정 등)를 읽지 못해</b> 실제 배포된 앱에서 오류가 날 위험이 큰 기능이었음</dd>
@@ -59,14 +59,14 @@
       </ul></dd>
       <dt>결과</dt><dd><b>8개 프로젝트에 적용</b>, 배포 후 관련 오류 없음 (<a class="more" href="obfuscation.html">자세한 과정 보기</a>)</dd>
     </dl></details>
-  <details class="case"><summary class="case-title">2. OpenCV 제거 — 리사이저 직접 구현, 테스트 코드로 검증 (찍스 셀프증명 등)</summary>
+  <details class="case"><summary class="case-title">2. OpenCV 제거 — 리사이저 직접 구현, 테스트 코드로 검증 (찍스 셀프증명 등, AI 활용)<span class="period">2026.10</span></summary>
     <dl>
       <dt>배경</dt><dd>OpenCV가 일부 기기에서 로딩에 실패하고, Android 16KB 페이지와 호환되지 않고, 앱 용량을 키움. 단계적 축소를 반복하며 대비·채도가 조금씩 변하는 문제도 있었음</dd>
-      <dt>해결</dt><dd>OpenCV의 리사이즈 방식을 <b>Kotlin으로 다시 구현</b>하고 1회 축소로 변경 (AI 활용)</dd>
+      <dt>해결</dt><dd>OpenCV의 리사이즈 방식을 <b>Kotlin으로 다시 구현</b>하고 1회 축소로 변경</dd>
       <dt>검증</dt><dd><b>테스트 코드를 추가</b>해 OpenCV 결과와 비교 — PNG 이미지, <b>줄무늬 셔츠 이미지(축소 시 모아레 현상 확인)</b>, 큰 이미지 → 작은 이미지 축소, 작은 이미지 → 큰 이미지 확대</dd>
       <dt>결과</dt><dd>OpenCV 결과와 <b>픽셀 차이 0~1</b> 유지, 셀프증명 APK <b>49.9MB → 36.8MB</b> (<a class="more" href="opencv.html">검증 과정 보기</a>)</dd>
     </dl></details>
-  <details class="case"><summary class="case-title">3. 셀프증명 코드 최신화 — 바뀐 코드를 익히는 개발자 학습 페이지 제작 (찍스 셀프증명)<span class="period">2026.10</span></summary>
+  <details class="case"><summary class="case-title">3. 셀프증명 코드 최신화 — 바뀐 코드를 익히는 개발자 학습 페이지 제작 (찍스 셀프증명, AI 활용)<span class="period">2026.10</span></summary>
     <dl>
       <dt>배경</dt><dd>AI를 도입해 셀프증명 코드를 최신화(Java → Kotlin·코루틴 전환, Hilt 의존성 주입 적용)하면서 코드 구조가 크게 바뀜</dd>
       <dt>해결</dt><dd><ul>
@@ -75,9 +75,9 @@
         <li><b>실제 셀프증명 코드(장바구니 주문 업로드 등)를 예제로</b>, 무엇이 바뀌었는지 → 핵심 개념 → 자주 하는 작업 레시피 → 에러·함정 순서로 구성</li>
       </ul></dd>
     </dl></details>
-  <details class="case"><summary class="case-title">4. 폴더블·태블릿·가로형 화면 대응 — 기존 폰 화면은 그대로 두고 넓은 화면만 예외 처리 (찍스·비비 8개 앱)<span class="period">2026.09~10</span></summary>
+  <details class="case"><summary class="case-title">4. 폴더블·태블릿·가로형 화면 대응 — 기존 폰 화면은 그대로 두고 넓은 화면만 예외 처리 (찍스·비비 8개 앱, AI 활용)<span class="period">2026.09~10</span></summary>
     <dl>
-      <dt>배경</dt><dd>기존 배포 앱은 <b>S10 가로 길이 기준 비율</b>로 크기를 계산 → 세로형 폰에서는 문제없었지만 <b>가로가 긴 기기(폴드 펼침·태블릿)에서는 세로 영역이 커지는 문제</b>. 대형 화면에서는 화면 방향·크기 제한 설정(screenOrientation, resizableActivity, min/maxAspectRatio)도 무시됨</dd>
+      <dt>배경</dt><dd>기존 배포 앱은 <b>S10 가로 길이 기준 비율</b>로 크기를 계산 → 세로형 폰에서는 문제없었지만 <b>가로가 긴 기기(폴드 펼침·태블릿)에서는 세로 영역이 커지는 문제</b>. 대형 화면에서는 화면 방향·크기 제한 설정(screenOrientation, resizeableActivity, min/maxAspectRatio)도 무시됨</dd>
       <dt>해결</dt><dd><ul>
         <li>기존 세로형 폰은 그대로 두고 <b>가로형·넓은 화면만 예외 처리</b> — 크기 계산을 ‘화면 비율 크기’와 ‘실제 물리 크기(dp)’ 중 작은 값으로 바꿔, 폰은 기존 배포와 같은 크기·넓은 화면은 상한 적용</li>
         <li>레이아웃 크기를 XML과 Java 두 곳에서 따로 관리하던 구조 정리 → 화면 density 자체를 디자인 기준으로 바꾸는 <b>DesignDensity</b>를 만들어, XML에 적은 dp가 곧 계산된 크기가 되게 함</li>
@@ -85,7 +85,6 @@
         <li>화면비 2.4 이상·1.3 미만 기기(21:9 = 2.33, 4:3 = 1.33 기준 밖)는 특정 아이콘 수치 예외 처리</li>
         <li>회전·창 크기 변경 대응 — 회전·분할 화면 크기 조절은 화면을 다시 만들지 않고 크기만 다시 계산, 폴드 접기·펴기처럼 기준값이 바뀔 때만 화면을 다시 만들고 스크롤 위치·탭 크기 유지</li>
         <li>Q/A 일정을 고려해 배포 버전의 화면 제한 설정(minAspectRatio 1.7, resizeableActivity=false 등)은 <b>그대로 두고</b> 대응 코드만 미리 구현 — 디버그 빌드에서만 회전을 허용해 확인, <b>나중에 설정을 지워도 바로 대응</b>되게 함 (셀프증명)</li>
-        <li>AI 코딩 도구로 구현</li>
       </ul></dd>
       <dt>결과</dt><dd>찍스·비비 8개 앱의 화면 크기 계산을 같은 방식으로 통일 (<a class="more" href="screen.html">자세한 과정 보기</a>)</dd>
     </dl></details>
@@ -96,7 +95,16 @@
         <li>특정 기기에서 두 손가락을 가까이 붙인 채 시작하면 <b>한 손가락으로 인식되는 에러</b> → 줌 제스처 감지(ScaleGestureDetector) 대신 <b>onTouch에서 직접 줌을 인식</b>하도록 변경 (사진 선택 화면, 찍스·비비 6개 앱)</li>
       </ul></dd>
     </dl></details>
-  <details class="case"><summary class="case-title">6. 요청을 그대로 만들지 않고 사용 흐름을 보고 의견 제시 — 포토북 디자인 선택 화면<span class="period">2026.10</span></summary>
+  <details class="case"><summary class="case-title">6. 뷰티 기능 다시 구현 — 사진 전체 필터에서 얼굴 영역에만 GLES 보정으로 (찍스 셀프증명, AI 활용)<span class="period">2026.01</span></summary>
+    <dl>
+      <dt>배경</dt><dd>2022.12에 오픈소스 GPUImage 라이브러리의 피부 보정 셰이더로 뷰티 기능을 처음 넣음 — 사진 전체에 보정이 적용되는 방식</dd>
+      <dt>해결</dt><dd><ul>
+        <li>ML Kit 얼굴 윤곽으로 마스크를 만들어 <b>얼굴 영역에만</b> 보정 — 눈·눈썹은 마스크에서 빼서 선명하게 유지</li>
+        <li>성능을 고려해 마스크는 <b>256×256 저해상도·ALPHA_8</b>(투명도만 저장)로 만들고, 보정은 <b>GLES</b>로 적용</li>
+      </ul></dd>
+      <dt>결과</dt><dd>미리보기·저장 사진 모두 적용 — 보정 범위를 얼굴 마스크로 줄이고 마스크를 저해상도로 만들어 <b>성능 향상</b></dd>
+    </dl></details>
+  <details class="case"><summary class="case-title">7. 요청을 그대로 만들지 않고 사용 흐름을 보고 의견 제시 — 포토북 디자인 선택 화면<span class="period">2026.10</span></summary>
     <dl>
       <dt>배경</dt><dd>개발하면서 UX가 어색해 보이는 부분은 요청한 담당자와 이야기하며 정해 나감</dd>
       <dt>의견</dt><dd><ul>
@@ -104,17 +112,26 @@
         <li>‘하단 탭을 누르면 맨 위로 올라가게’ 요청 → 다른 탭으로 이동할 때는 기존 탭 위치를 유지해야 하므로, <b>이미 선택된 탭을 한 번 더 눌렀을 때만</b> 맨 위로 올라가게 하자고 제안</li>
       </ul></dd>
     </dl></details>
+  <details class="case"><summary class="case-title">8. 통신 라이브러리 교체 — 지원이 끝난 loopj를 OkHttp로, 인증서 검사 우회 제거 (8개 앱, AI 활용)<span class="period">2026.10</span></summary>
+    <dl>
+      <dt>배경</dt><dd>통신에 쓰던 loopj(android-async-http)는 업데이트가 끊긴 라이브러리였고, 모든 인증서·호스트를 허용하는 코드(getFixedSocketFactory)가 있어 <b>중간자 공격에 열려 있고 Play 보안 경고 대상</b>이었음</dd>
+      <dt>해결</dt><dd><ul>
+        <li>loopj와 같은 사용법의 <b>OkHttp 기반 호환 패키지</b>를 만들어 8개 앱에 같은 코드로 적용 — 호출 코드는 import만 바꾸고, 콜백 순서·스레드·실패 처리는 기존과 같게 맞춤</li>
+        <li>인증서 검사 우회 코드를 지우고 OkHttp 기본 검사(안드로이드 신뢰 저장소) 사용 — 운영 서버 인증서가 정상인지 먼저 확인</li>
+      </ul></dd>
+      <dt>결과</dt><dd>8개 앱에 적용, 그중 6개 앱 배포 완료 (2026.10)</dd>
+    </dl></details>
   <div class="project">
     <p class="project-title">AI 개발 활용</p>
     <p class="lead">Claude가 어디까지 동작할 수 있는지 직접 확인하다 <b>MCP</b>(외부 도구를 AI에 연결하는 방식)를 알게 되어, 아래 도구들을 연동해 <b>구현 속도를 높임</b></p>
     <ul>
       <li>Figma 연동</li>
       <li>PPT 연동</li>
-      <li>Firebase Crashlytics 연동</li>
+      <li>Firebase Crashlytics 연동 — AI가 크래시 목록을 직접 읽고 원인 코드를 찾음. 코드 수정은 <b>diff를 직접 확인하고 테스트한 뒤 커밋</b></li>
     </ul>
   </div>
 
-  <h2>직접 해결한 문제 ② — AI 코딩 도구 도입 전 (~2026.03)</h2>
+  <h2>직접 해결한 문제 ② — AI 코딩 도구 도입 전 (~2025)</h2>
 
   <details class="case"><summary class="case-title">1. 셀프 증명사진 ‘오이 현상’ 해결 — 최적 촬영 거리 계산 알고리즘 도입 (찍스 셀프증명)</summary>
     <dl>
@@ -123,25 +140,14 @@
       <dt>결과</dt><dd>여러 기기에서 테스트하여 배포에 성공 (<a class="more" href="distance.html">계산 원리 그림 보기</a>)</dd>
     </dl></details>
 
-  <details class="case"><summary class="case-title">2. 고해상도 사진 리사이즈 시 화질 저하 해결 (찍스 셀프증명)</summary>
-    <dl>
-      <dt>배경</dt><dd>고해상도 사진을 작게 리사이즈할 경우 화질 문제 발생</dd>
-      <dt>원인</dt><dd>Android 자체 Bitmap API로 큰 해상도를 한 번에 작게 줄이면 해상도가 떨어짐</dd>
-      <dt>해결</dt><dd><ul>
-        <li>리사이즈 테스트 후 <b>단계적으로 축소</b>하는 방식으로 바꿔 화질 향상</li>
-        <li>그래도 화질이 부족해 <b>OpenCV 도입</b></li>
-      </ul></dd>
-      <dt>결과</dt><dd>OpenCV 도입으로 화질 추가 향상</dd>
-    </dl></details>
-
-  <details class="case"><summary class="case-title">3. 사진 선택 화면 확대·축소 애니메이션 커스텀 구현 (핀치 줌 인/아웃 애니메이션)<span class="period">2024.10</span></summary>
+  <details class="case"><summary class="case-title">2. 사진 선택 화면 확대·축소 애니메이션 커스텀 구현 (찍스 셀프증명 등)<span class="period">2024.10</span></summary>
     <dl>
       <dt>배경</dt><dd>회사에서 <b>기본 갤러리 앱처럼 핀치 줌 시 애니메이션 효과</b>를 요청 — 성능 문제와 개발 기간이 늘어날 수 있다고 미리 공유했고, 괜찮다는 답변을 받아 진행</dd>
       <dt>해결</dt><dd><b>2개의 가상 RecyclerView</b>로 바뀌기 전 열 수와 바뀐 뒤 열 수의 배치를 미리 계산하고, 두 좌표 위치를 바탕으로 확대·축소 애니메이션 구현</dd>
       <dt>결과</dt><dd>기존 3~5열 구성은 유지하면서, 열 수가 <b>툭 끊기며 바뀌던 화면을 애니메이션과 함께 자연스럽게 바뀌도록</b> 개선 (버벅임 없음) (<a class="more" href="pinchzoom.html">원리 그림 보기</a>)</dd>
     </dl></details>
 
-  <details class="case"><summary class="case-title">4. 포토북 복잡한 뷰 터치 조작 기능 구현 (찍스 포토북)<span class="period">2020.03 ~ 2020.08</span></summary>
+  <details class="case"><summary class="case-title">3. 포토북 복잡한 뷰 터치 조작 기능 구현 (찍스 포토북)<span class="period">2020.03 ~ 2020.08</span></summary>
     <dl>
       <dt>배경</dt><dd>2020 포토북 편집기 <b>리뉴얼(전면 재작성)</b> 과정에서 사진·사진틀·스티커 뷰의 <b>줌, 이동, 뷰 터치 등 터치 관련 동작을 새로 구현</b></dd>
       <dt>해결</dt><dd><ul>
@@ -154,7 +160,7 @@
       <dt>결과</dt><dd>스티커 크기 조절·회전, 사진 위치 변경, 표지 영역 이동 범위 제한 등 편집 화면 터치 동작 구현 — 2020 포토북 편집기 리뉴얼에 포함</dd>
     </dl></details>
 
-  <details class="case"><summary class="case-title">5. 사진 정보 분석 기능 — MediaStore와 ExifInterface를 나눠 사용 (찍스 사진인화)<span class="period">2020.03 ~ 2022.02</span></summary>
+  <details class="case"><summary class="case-title">4. 사진 정보 분석 기능 — MediaStore와 ExifInterface를 나눠 사용 (찍스 사진인화)<span class="period">2020.03 ~ 2022.02</span></summary>
     <dl>
       <dt>배경</dt><dd>사진의 촬영일·회전·가로세로 크기 정보가 필요한데, MediaStore로 읽은 정보는 정확성이 낮고 ExifInterface로 읽은 정보는 정확성이 높음</dd>
       <dt>해결</dt><dd><ul>
@@ -164,40 +170,32 @@
       </ul></dd>
       <dt>결과</dt><dd>저사양(Android 5) 기기부터 최신(갤럭시 S22) 기기까지 안정적으로 동작하도록 배포</dd>
     </dl></details>
-  <details class="case"><summary class="case-title">6. 포토북 편집기 전면 재작성과 Undo/Redo 구현 (찍스 포토북)<span class="period">2020 · 2022</span></summary>
+  <details class="case"><summary class="case-title">5. 포토북 편집기 전면 재작성과 Undo/Redo 구현 (찍스 포토북)<span class="period">2020 · 2022</span></summary>
     <dl>
       <dt>해결</dt><dd><ul>
-        <li>포토북 편집기를 <b>전면 재작성</b> (2020)</li>
+        <li>2018년에 만들어진 포토북 앱의 <b>편집 화면을 새 구조로 다시 만듦</b> — 개별·전체 보기 편집, 사진 자동 넣기, 페이지 추가·제거, 표지·프롤로그·에필로그, 미리보기 (2020.02~08)</li>
         <li><b>Undo/Redo</b> 구현 — 편집 데이터를 <b>JSON으로 통째로 저장</b>하는 구조를 만들고, 저장하는 시점과 불러오는 시점에 주의해 구현 (2022)</li>
         <li>편집 후 사진 리스트가 함께 되돌려지면 안 되는 경우가 있어, <b>UndoRedoManager 클래스로 모듈화</b>하고 이력을 둘로 나눔 — <b>사진 리스트</b>(undoRedoPicMap)와 <b>편집 데이터</b>(undoRedoHistoryItems_EditItem). 나눠 둔 덕분에 각각 따로 테스트하며 개발 (<a class="more" href="undoredo.html">구조 그림 보기</a>)</li>
       </ul></dd>
     </dl></details>
-  <details class="case"><summary class="case-title">7. 사진인화 앱 상품 확장 구조 설계 — 상품별 패키지·DB 분리 (찍스 사진인화, 2021~2025)</summary>
+  <details class="case"><summary class="case-title">6. 사진인화 앱 상품 확장 구조 설계 — 상품별 패키지·DB 분리 (찍스 사진인화)<span class="period">2021~2025</span></summary>
     <dl>
       <dt>배경</dt><dd>사진 인화 기능만 있던 앱에 새 상품이 계속 추가됨</dd>
       <dt>해결</dt><dd><ul>
         <li>상품이 늘어나는 구조를 <b>직접 설계</b> — <b>패키지를 상품별로 나누고, DB도 상품별 테이블로</b> 분리 (캘린더는 전용 DB)</li>
-        <li>이 구조로 다른 앱의 기능을 사진인화 앱에 가져와 추가 — <b>액자</b>(2021, 다른 액자 앱 기능), <b>콜라주</b>(2021, 포토북 기능), <b>캘린더</b>(2023, 포토북 기능 활용), <b>트레카</b>(2025)</li>
+        <li>이 구조로 다른 앱의 기능을 사진인화 앱에 가져와 추가 — <b>액자</b>(2021, 다른 액자 앱 기능), <b>콜라주</b>(2021, 포토북 기능), <b>캘린더</b>(2023, 포토북 기능 활용), <b>포토카드</b>(2025)</li>
       </ul></dd>
     </dl></details>
-  <details class="case"><summary class="case-title">8. 네트워크 코드 규격화와 캐시 처리 — 서버 버전 관리 없이 앱에서 갱신 대상을 나눠 관리 (찍스 사진인화 등, 2022~)</summary>
+  <details class="case"><summary class="case-title">7. 네트워크 코드 규격화와 캐시 처리 — 서버 버전 관리 없이 앱에서 갱신 대상을 나눠 관리 (찍스 사진인화 등)<span class="period">2022~</span></summary>
     <dl>
       <dt>배경</dt><dd>서버에서 데이터의 갱신 버전을 관리하지 않아, 앱이 언제 새로 받아야 하는지 알 수 없었음</dd>
       <dt>해결</dt><dd><ul>
+        <li>같은 값이 <b>배열 또는 오브젝트</b>로 내려오는 API가 있어, 정해진 타입으로 바로 바꾸는 Retrofit(Gson) 대신 <b>응답 원문을 받아 org.json으로 직접 파싱</b>(당시 통신 라이브러리 loopj) — 오브젝트면 배열로 감싸 항상 배열로 처리</li>
         <li><b>API 1개 = 클래스 1개(Request○○)</b>로 규격화 — 메서드 이름·호출 방법·결과 콜백(성공/실패)을 통일</li>
         <li>같은 이름 <b>get○○</b>을 부르는 방법으로 구분 — 인자 없이 부르면 <b>저장된 값</b>(서버 호출 없음), 갱신 여부와 콜백을 넘기면 <b>갱신 여부에 따라 서버 호출 또는 저장된 값 사용</b> (<a class="more" href="network.html">자세한 구조 보기</a>)</li>
       </ul></dd>
     </dl></details>
-  <details class="case"><summary class="case-title">9. 뷰티 기능 — 얼굴 마스크 영역에만 GLES 보정 적용 (찍스 셀프증명, 2026.01)</summary>
-    <dl>
-      <dt>배경</dt><dd>카메라 미리보기와 저장 사진에 뷰티(피부 보정) 기능 추가</dd>
-      <dt>해결</dt><dd><ul>
-        <li>ML Kit 얼굴 윤곽으로 마스크를 만들어 <b>얼굴 영역에만</b> 보정 — 눈·눈썹은 마스크에서 빼서 선명하게 유지</li>
-        <li>성능을 고려해 마스크는 <b>256×256 저해상도·ALPHA_8</b>(투명도만 저장)로 만들고, 보정은 <b>GLES</b>로 적용</li>
-      </ul></dd>
-      <dt>결과</dt><dd>미리보기·저장 사진 모두 동작. 성능 부담은 남아 개선 과제로 둠</dd>
-    </dl></details>
-  <details class="case"><summary class="case-title">10. 크롭 화면 직접 구현 — 화질이 떨어지지 않는 줌 한도 계산, 줌·이동 터치 판별 (찍스 사진인화, 2020)</summary>
+  <details class="case"><summary class="case-title">8. 크롭 화면 직접 구현 — 화질이 떨어지지 않는 줌 한도 계산, 줌·이동 터치 판별 (찍스 사진인화)<span class="period">2020</span></summary>
     <dl>
       <dt>배경</dt><dd>외부 라이브러리 대신 크롭 화면을 직접 구현 — <b>코드를 다 이해해야 나중에 고칠 수 있다</b>고 판단했고, 외부 라이브러리는 내부 코드를 열어 볼 수 없는 부분이 많았음</dd>
       <dt>해결</dt><dd><ul>
