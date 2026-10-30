@@ -17,26 +17,17 @@
   </header>
 
   <nav class="toc">
-    <a href="#core">핵심 역량</a>
     <a href="#stack">기술 스택</a>
     <a href="#career">경력기술서</a>
     <a href="#edu">학력 · 입상</a>
   </nav>
-
-  <section class="block" id="core">
-    <h2 class="sec">핵심 역량</h2>
-    <ul>
-    <li><b>카메라·이미지 품질 문제 해결</b> — 촬영 왜곡과 화질 저하의 원인을 찾아 수학적 계산과 이미지 처리로 개선 (셀프증명)</li>
-    <li><b>복잡한 UI 직접 구현</b> — 기본 위젯으로 안 되는 터치 조작과 애니메이션을 Custom View로 직접 설계·구현</li>
-  </ul>
-  </section>
 
   <section class="block" id="stack">
     <h2 class="sec">기술 스택</h2>
     <table>
     <colgroup><col style="width:20%"><col></colgroup>
     <tr><td class="key">능숙하게 사용</td><td>Java, SQL(SQLite), Camera1, ViewBinding, Custom View, Glide, Retrofit, OkHttp, Gson, WebView(JavaScript Bridge), FCM·핑거푸시, Airbridge·AppsFlyer, Firebase Crashlytics, Git, SourceTree, Claude Code(AI 코딩 에이전트)</td></tr>
-    <tr><td class="key">사용 경험 있음</td><td>Kotlin, Coroutines, Hilt, ML Kit Face Detection, ARCore, OpenCV, 토스페이먼츠·KCP, PayPay·LINE Pay, 카카오·네이버·구글·LINE 로그인, Gradle(버전 카탈로그, 커스텀 Task), GitHub, Bitbucket, TeamGantt, Trello, MCP 연동</td></tr>
+    <tr><td class="key">사용 경험 있음</td><td>Kotlin, Coroutines, Hilt, ML Kit Face Detection, ARCore, OpenCV, 카카오·네이버·구글·LINE 로그인, Gradle(버전 카탈로그, 커스텀 Task), GitHub, Bitbucket, TeamGantt, Trello, MCP 연동</td></tr>
     <tr><td class="key">AI 코딩 도구로 적용</td><td>Camera2(Camera1 직접 개발 후 AI로 마이그레이션), OpenGL ES 2/3·GLSL, MediaCodec·MediaMuxer, ViewModel·SavedStateHandle, Activity Result API, WorkManager, R8/ProGuard, Android Lint</td></tr>
   </table>
   </section>
@@ -45,6 +36,16 @@
     <h2 class="sec">경력기술서</h2>
     <button type="button" class="toggle-all" aria-expanded="false">모두 펼치기</button>
     <h2>㈜디지털포토 &nbsp;|&nbsp; 2019.08 ~ 재직중 &nbsp;|&nbsp; 대리 · Android 개발</h2>
+  <p class="lead">찍스(국내)·비비(일본) <b>8개 앱의 신규 개발과 유지보수를 단독으로 담당</b> — Play 스토어 누적 다운로드 <b>300만+</b></p>
+  <table class="small">
+    <colgroup><col style="width:26%"><col style="width:12%"><col style="width:12%"><col style="width:26%"><col style="width:12%"><col style="width:12%"></colgroup>
+    <tr><th>찍스 (국내)</th><th>다운로드</th><th>평점</th><th>비비 (일본)</th><th>다운로드</th><th>평점</th></tr>
+    <tr><td>찍스 사진인화</td><td>100만+</td><td>4.9</td><td>비비 사진인화</td><td>50만+</td><td>4.8</td></tr>
+    <tr><td>찍스 셀프증명</td><td>50만+</td><td>4.7</td><td>파샤토 (증명사진)</td><td>100만+</td><td>3.1</td></tr>
+    <tr><td>찍스 포토북</td><td>10만+</td><td>4.7</td><td>비비 포토북</td><td>1만+</td><td>4.5</td></tr>
+    <tr><td>찍스 MY네컷</td><td>5만+</td><td>4.4</td><td>비비 연하장</td><td>1만+</td><td>4.4</td></tr>
+  </table>
+  <p class="note">Google Play 기준 (2026.10)</p>
 
   <h2>직접 해결한 문제 ① — AI 코딩 도구 도입 후 (2026.04 도입, 2026.08부터 본격 활용)</h2>
   <details class="case"><summary class="case-title">1. 난독화(R8) 도입 — AI 결과를 그대로 쓰지 않고 위험 요소를 직접 판단, 빌드 단계 안전장치 추가 (8개 앱)</summary>
@@ -54,7 +55,7 @@
       <dt>해결</dt><dd><ul>
         <li>AI에 맡기기 전에 <b>위험성을 직접 조사</b>하고 작업 범위를 정해 요청 — 저장 데이터 모델 패키지 정리·@Keep, 앱별 API에 맞는 규칙, 전체 파일 검사, 놓친 부분은 물어보고 진행</li>
         <li>AI가 빌드를 통과시키려고 넣은 <b>dontwarn(경고 숨김)을 제거</b> — 경고를 숨기면 클래스 누락이 실행 중 크래시로 나타날 수 있어, 경고는 원인을 확인한 뒤 필요한 것만 추가하는 기준을 정함</li>
-        <li>@Keep은 코드에만 있어서 이후 구현하는 사람이 실수로 빠뜨릴 수 있다고 판단 → <b>빌드할 때 위험한 코드를 검사해 빌드를 멈추는 코드(r8-guard.gradle)</b>를 AI에 요청해 추가</li>
+        <li>@Keep은 코드에만 있어서 이후 구현하는 사람이나 AI가 실수로 빠뜨릴 수 있다고 판단 → <b>빌드할 때 위험한 코드를 검사해 빌드를 멈추는 코드(r8-guard.gradle)</b>를 AI에 요청해 추가 — 규칙을 문서로만 두지 않고 빌드 실패로 드러나게 해서, <b>AI가 코드를 고친 뒤 빌드하면 스스로 감지하고 고칠 수 있도록</b> 함</li>
       </ul></dd>
       <dt>결과</dt><dd><b>8개 프로젝트에 적용</b>, 배포 후 관련 오류 없음 (<a class="more" href="obfuscation.html">자세한 과정 보기</a>)</dd>
     </dl></details>
@@ -79,8 +80,10 @@
       <dt>배경</dt><dd>기존 배포 앱은 <b>S10 가로 길이 기준 비율</b>로 크기를 계산 → 세로형 폰에서는 문제없었지만 <b>가로가 긴 기기(폴드 펼침·태블릿)에서는 세로 영역이 커지는 문제</b>. 대형 화면에서는 화면 방향·크기 제한 설정(screenOrientation, resizableActivity, min/maxAspectRatio)도 무시됨</dd>
       <dt>해결</dt><dd><ul>
         <li>기존 세로형 폰은 그대로 두고 <b>가로형·넓은 화면만 예외 처리</b> — 크기 계산을 ‘화면 비율 크기’와 ‘실제 물리 크기(dp)’ 중 작은 값으로 바꿔, 폰은 기존 배포와 같은 크기·넓은 화면은 상한 적용</li>
+        <li>레이아웃 크기를 XML과 Java 두 곳에서 따로 관리하던 구조 정리 → 화면 density 자체를 디자인 기준으로 바꾸는 <b>DesignDensity</b>를 만들어, XML에 적은 dp가 곧 계산된 크기가 되게 함</li>
+        <li>density를 바꾸면 코드로 만든 비트맵 이미지 크기가 5~10% 달라지는 부작용 확인 → <b>빌드 검사(design-density-guard.gradle)와 디버그 빌드 화면 감시</b>(어긋난 이미지에 빨간 테두리·로그)로 사람과 AI 모두 놓치지 않게 함</li>
         <li>화면비 2.4 이상·1.3 미만 기기(21:9 = 2.33, 4:3 = 1.33 기준 밖)는 특정 아이콘 수치 예외 처리</li>
-        <li>회전·창 크기 변경 대응 — 화면 변경 시 앱을 다시 띄우지 않고 크기만 다시 계산, 스크롤 위치·탭 크기 유지, 폴드 접힘·펼침 기준 재계산</li>
+        <li>회전·창 크기 변경 대응 — 회전·분할 화면 크기 조절은 화면을 다시 만들지 않고 크기만 다시 계산, 폴드 접기·펴기처럼 기준값이 바뀔 때만 화면을 다시 만들고 스크롤 위치·탭 크기 유지</li>
         <li>Q/A 일정을 고려해 배포 버전의 화면 제한 설정(minAspectRatio 1.7, resizeableActivity=false 등)은 <b>그대로 두고</b> 대응 코드만 미리 구현 — 디버그 빌드에서만 회전을 허용해 확인, <b>나중에 설정을 지워도 바로 대응</b>되게 함 (셀프증명)</li>
         <li>AI 코딩 도구로 구현</li>
       </ul></dd>
@@ -91,6 +94,14 @@
       <dt>해결</dt><dd><ul>
         <li>크롭 화면의 확대·축소 기준을 <b>크롭 영역 중심점</b>으로 변경 (찍스 셀프증명)</li>
         <li>특정 기기에서 두 손가락을 가까이 붙인 채 시작하면 <b>한 손가락으로 인식되는 에러</b> → 줌 제스처 감지(ScaleGestureDetector) 대신 <b>onTouch에서 직접 줌을 인식</b>하도록 변경 (사진 선택 화면, 찍스·비비 6개 앱)</li>
+      </ul></dd>
+    </dl></details>
+  <details class="case"><summary class="case-title">6. 요청을 그대로 만들지 않고 사용 흐름을 보고 의견 제시 — 포토북 디자인 선택 화면<span class="period">2026.10</span></summary>
+    <dl>
+      <dt>배경</dt><dd>개발하면서 UX가 어색해 보이는 부분은 요청한 담당자와 이야기하며 정해 나감</dd>
+      <dt>의견</dt><dd><ul>
+        <li>‘화살표를 누르면 위로 올라가게’ 요청 → 헤더의 그림자 효과 때문에 <b>헤더 전체가 버튼처럼 보여</b>, 화살표가 아니라 헤더 전체를 누르는 영역으로 바꾸자고 제안</li>
+        <li>‘하단 탭을 누르면 맨 위로 올라가게’ 요청 → 다른 탭으로 이동할 때는 기존 탭 위치를 유지해야 하므로, <b>이미 선택된 탭을 한 번 더 눌렀을 때만</b> 맨 위로 올라가게 하자고 제안</li>
       </ul></dd>
     </dl></details>
   <div class="project">
@@ -149,7 +160,7 @@
       <dt>해결</dt><dd><ul>
         <li>갤러리에 여러 사진을 표시할 때는 <b>MediaStore</b>, 선택한 사진을 장바구니에 추가하는 과정에서는 <b>ExifInterface</b>를 사용하도록 나눔 — 목록은 빠르게, 선택한 사진은 정확하게 (2020.03)</li>
         <li>ExifInterface도 성능이 느려 <b>스레드 풀로 여러 사진을 동시에 읽는 병렬 처리</b> 방식으로 변경 (2022.02)</li>
-        <li>갤럭시 S22·S9, Android 5 기기 등 다양한 기기에서 테스트해 최적의 동시 처리 개수를 <b>스레드 5개</b>로 설정</li>
+        <li>동시에 처리하는 개수를 무작정 늘리면 오히려 느려져, 개수를 적게·중간·많게 바꿔 가며 <b>회사 테스트 기기(갤럭시 S22·S9, Android 5 기기 등)별로 모두 확인</b>한 뒤 <b>스레드 5개</b>로 설정</li>
       </ul></dd>
       <dt>결과</dt><dd>저사양(Android 5) 기기부터 최신(갤럭시 S22) 기기까지 안정적으로 동작하도록 배포</dd>
     </dl></details>
