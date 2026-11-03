@@ -123,6 +123,34 @@
       </ul></dd>
       <dt>결과</dt><dd>8개 앱에 적용, 그중 6개 앱 배포 완료 (2026.10)</dd>
     </dl></details>
+  <details class="case"><summary class="case-title">9. 화면 상태 저장 크래시(TransactionTooLarge) — 크기를 먼저 측정하고 저장 범위를 줄임 (찍스·비비 포토북 등, AI 활용)<span class="period">2026.10~11</span></summary>
+    <dl>
+      <dt>배경</dt><dd>앱이 백그라운드로 갔다 돌아오거나 결제 화면에서 돌아올 때, 화면 상태 저장 크기가 한도를 넘어 <b>강제 종료</b>(TransactionTooLargeException)</dd>
+      <dt>해결</dt><dd><ul>
+        <li>원인을 추측하지 않고 <b>화면 상태 저장 크기를 재는 로그</b>(SavedStateSizeLogger, 로그가 켜져 있을 때만 동작)를 먼저 넣어 어느 화면·어느 항목이 큰지 확인</li>
+        <li>포토북 편집·미리보기 화면 — 페이지 어댑터가 모든 페이지 상태를 저장하던 것을 <b>지금 페이지 ±2만</b> 저장하도록 변경</li>
+        <li>웹뷰 화면 — 상태가 <b>200KB 이하일 때만</b> 저장해 결제 후 돌아올 때의 강제 종료 수정</li>
+      </ul></dd>
+      <dt>결과</dt><dd>찍스 포토북 3.12.15 배포, 웹뷰 수정은 찍스·비비 여러 앱에 같은 방식으로 적용</dd>
+    </dl></details>
+  <details class="case"><summary class="case-title">10. 앱 용량 줄이기 — release APK 42.0MB → 26.9MB (찍스 MY네컷, AI 활용)<span class="period">2026.10~11</span></summary>
+    <dl>
+      <dt>해결</dt><dd><ul>
+        <li>인트로 이미지 PNG → JPEG(10.6MB → 1.1MB), 개발용 테스트 화면·리소스를 debug 빌드로 이동 → <b>34.4MB</b></li>
+        <li>웹 PDF 저장을 네이티브 라이브러리(android-pdfview) 대신 <b>안드로이드 기본 PdfRenderer</b>로 교체 → <b>26.9MB</b> — 바꾼 뒤 동작이 같은지 계측 테스트 5개(A4 세로·가로, 영수증, 크기 섞인 페이지, PDF 아닌 파일)로 확인</li>
+        <li>사진인화 앱도 AR 환경맵 25MB → 0.4MB, AR 카메라 권한은 debug 빌드에만 남김</li>
+      </ul></dd>
+      <dt>결과</dt><dd>MY네컷 release APK <b>약 36% 감소</b>, PdfRenderer 교체는 찍스·비비 포토북 등 다른 앱에도 같은 코드로 적용</dd>
+    </dl></details>
+  <details class="case"><summary class="case-title">11. Crashlytics 기반 크래시 정리 — 화면 수명과 어긋난 작업 막기, 기록할 오류 구분 (8개 앱, AI 활용)<span class="period">2026.10~11</span></summary>
+    <dl>
+      <dt>해결</dt><dd><ul>
+        <li>끝난 화면에 팝업을 띄워 나던 BadTokenException — 공통 팝업 함수에서 화면이 끝났으면 띄우지 않도록 막음 (8개 앱)</li>
+        <li>화면이 끝난 뒤 늦게 도착한 콜백·작업으로 나던 크래시, 목록 데이터를 다른 스레드에서 바꿔 나던 RecyclerView 불일치 크래시 수정</li>
+        <li>파샤토 — 일시적인 네트워크 오류는 오류(non-fatal) 대신 로그로 바꾸고(74곳), 기록 없이 넘어가던 장바구니 DB·업로드·웹뷰 예외 18곳에 기록 추가 → <b>Crashlytics에 진짜 오류만 남게</b> 정리</li>
+      </ul></dd>
+      <dt>방식</dt><dd>AI가 Crashlytics 크래시 목록을 읽고 원인 코드를 찾으면, 수정은 diff를 직접 확인하고 기기에서 재현·테스트한 뒤 커밋</dd>
+    </dl></details>
   <div class="project">
     <p class="project-title">AI 개발 활용</p>
     <p class="lead">Claude가 어디까지 동작할 수 있는지 직접 확인하다 <b>MCP</b>(외부 도구를 AI에 연결하는 방식)를 알게 되어, 아래 도구들을 연동해 <b>구현 속도를 높임</b></p>
